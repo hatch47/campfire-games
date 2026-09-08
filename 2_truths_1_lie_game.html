@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>2 Truths 1 Lie</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #1e3a2b;
+      color: #f3e9d2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      margin: 0;
+    }
+
+    #app {
+      max-width: 480px;
+      width: 100%;
+      background: #1e3a2b;
+      border-radius: 32px;
+      padding: 20px 16px 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      border: 1px solid #5a7a4b;
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #f3e9d2;
+      border-bottom: 2px dashed #5a7a4b;
+      padding-bottom: 10px;
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .mode-btn {
+      background: #2b4f3a;
+      border: 2px solid #5a7a4b;
+      color: #f3e9d2;
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex: 1;
+      text-align: center;
+    }
+
+    .mode-btn.active {
+      background: #5a7a4b;
+      border-color: #c4b08a;
+      color: #f3e9d2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .mode-btn:active { transform: scale(0.96); }
+
+    .panel {
+      background: #1e3a2b;
+      border-radius: 24px;
+      padding: 16px 12px;
+      margin-bottom: 20px;
+      border: 1px solid #5a7a4b;
+    }
+
+    .players-area {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      margin-bottom: 6px;
+    }
+
+    .player-tag {
+      background: #2b4f3a;
+      padding: 6px 16px 6px 14px;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      border: 1px solid #5a7a4b;
+    }
+
+    .player-tag .remove-btn {
+      background: none;
+      border: none;
+      color: #d6b68b;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0 2px;
+      line-height: 1;
+    }
+
+    .player-tag .remove-btn:active { opacity: 0.6; }
+
+    .add-player-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .add-player-form input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 60px;
+      border: 1px solid #5a7a4b;
+      background: #2b4f3a;
+      color: #f3e9d2;
+      font-size: 0.95rem;
+      min-width: 120px;
+    }
+
+    .add-player-form input::placeholder { color: #b8b09a; }
+
+    .add-player-form button {
+      background: #5a7a4b;
+      border: none;
+      color: #f3e9d2;
+      padding: 10px 20px;
+      border-radius: 60px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      border: 1px solid #7c9a6b;
+      transition: 0.1s;
+    }
+
+    .add-player-form button:active { background: #4a6e3b; }
+
+    .config-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 8px 0 4px;
+    }
+
+    .config-label {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .round-selector {
+      display: flex;
+      gap: 6px;
+      background: #1e3a2b;
+      padding: 4px;
+      border-radius: 60px;
+      border: 1px solid #5a7a4b;
+    }
+
+    .round-selector button {
+      background: transparent;
+      border: none;
+      color: #f3e9d2;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .round-selector button.active {
+      background: #5a7a4b;
+      color: #f3e9d2;
+    }
+
+    .round-selector button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .question-box {
+      background: #1e3a2b;
+      padding: 18px 10px;
+      border-radius: 20px;
+      border: 1px solid #5a7a4b;
+      margin: 16px 0 12px;
+    }
+
+    .truth-lie-item {
+      padding: 10px 12px;
+      margin: 6px 0;
+      background: #2b4f3a;
+      border-radius: 40px;
+      border-left: 6px solid #c4b08a;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .truth-lie-item strong { color: #f3e9d2; }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 18px 0 6px;
+    }
+
+    .action-btn {
+      background: #2b4f3a;
+      border: 2px solid #5a7a4b;
+      color: #f3e9d2;
+      padding: 12px 22px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      flex: 1 0 auto;
+      transition: 0.1s;
+    }
+
+    .action-btn:active { background: #3f664d; }
+    .action-btn.reveal { background: #6d4f3a; border-color: #b28b6b; }
+    .action-btn.primary { background: #4a6e3b; border-color: #7c9a6b; }
+    .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .action-btn.quit { background: #6d3a3a; border-color: #8b4b4b; }
+
+    .explanation-box {
+      background: #2b4f3a;
+      padding: 14px 16px;
+      border-radius: 24px;
+      margin: 16px 0 8px;
+      border-left: 6px solid #d6b68b;
+      font-style: italic;
+      color: #f3e9d2;
+      word-break: break-word;
+    }
+
+    .competitive-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 12px 0 6px;
+    }
+
+    .score-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 12px;
+      margin: 12px 0 6px;
+    }
+
+    .score-badge {
+      background: #2b4f3a;
+      padding: 4px 14px;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      border: 1px solid #5a7a4b;
+    }
+
+    .score-badge span { font-weight: 700; margin-left: 6px; }
+
+    .win-message {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 12px;
+      background: #2b4f3a;
+      border-radius: 60px;
+      margin: 10px 0;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      text-align: center;
+      color: #b8b09a;
+      margin-top: 16px;
+      opacity: 0.8;
+    }
+
+    .hidden { display: none; }
+    .flex-center { display: flex; justify-content: center; }
+
+    .start-area {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+
+    .start-btn {
+      background: #5a7a4b;
+      border: 2px solid #7c9a6b;
+      color: #f3e9d2;
+      padding: 14px 40px;
+      border-radius: 60px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.1s;
+      width: 100%;
+    }
+
+    .start-btn:active { background: #4a6e3b; }
+    .start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .question-counter {
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+      background: #2b4f3a;
+      padding: 6px 12px;
+      border-radius: 60px;
+      display: inline-block;
+      margin: 0 auto 8px;
+      border: 1px solid #5a7a4b;
+    }
+
+    .scoring-disabled-note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #b8b09a;
+      margin: 8px 0;
+      font-style: italic;
+    }
+
+    .quit-area {
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .quit-btn {
+      background: #6d3a3a;
+      border: 2px solid #8b4b4b;
+      color: #f3e9d2;
+      padding: 10px 30px;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .quit-btn:active { background: #5a2e2e; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <h1>2✓1✗</h1>
+
+  <!-- mode toggle -->
+  <div class="mode-toggle">
+    <button id="funModeBtn" class="mode-btn active">🎉 Fun</button>
+    <button id="compModeBtn" class="mode-btn">⚔️ Competitive</button>
+  </div>
+
+  <!-- PLAYER PANEL (always visible) -->
+  <div class="panel" id="configPanel">
+    <div id="playersContainer" class="players-area"></div>
+    <div class="add-player-form">
+      <input type="text" id="playerNameInput" placeholder="Player name" maxlength="20">
+      <button id="addPlayerBtn">+ Add</button>
+    </div>
+  </div>
+
+  <!-- CONFIGURATION: Round selector always visible -->
+  <div class="panel" id="configPanel2">
+    <div class="config-row">
+      <span class="config-label">📊 Questions:</span>
+      <div class="round-selector" id="roundSelector">
+        <button data-round="10" class="active">10</button>
+        <button data-round="25">25</button>
+        <button data-round="0">∞</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- START BUTTON -->
+  <div class="start-area" id="startArea">
+    <button id="startGameBtn" class="start-btn">▶ Start Game</button>
+  </div>
+
+  <!-- FUN MODE UI -->
+  <div id="funModePanel" class="hidden">
+    <div class="question-box" id="funQuestionBox">
+      <div class="truth-lie-item"><strong>1.</strong> <span id="funT1">—</span></div>
+      <div class="truth-lie-item"><strong>2.</strong> <span id="funT2">—</span></div>
+      <div class="truth-lie-item"><strong>3.</strong> <span id="funLie">—</span></div>
+    </div>
+    <div class="action-row">
+      <button class="action-btn" id="funNewBtn">✨ New</button>
+      <button class="action-btn reveal" id="funRevealBtn">🔍 Reveal lie</button>
+    </div>
+    <div id="funExplanation" class="explanation-box hidden"></div>
+    <div class="quit-area">
+      <button class="quit-btn" id="funQuitBtn">✖ Quit Game</button>
+    </div>
+  </div>
+
+  <!-- COMPETITIVE MODE UI -->
+  <div id="compModePanel" class="hidden">
+    <div class="competitive-controls">
+      <button class="action-btn" id="compNewQuestionBtn" style="flex:0 1 auto; padding: 6px 18px;">Next Q</button>
+    </div>
+
+    <div style="text-align: center;">
+      <span id="questionCounter" class="question-counter">Question 0 / 0</span>
+    </div>
+
+    <div class="question-box" id="compQuestionBox">
+      <div class="truth-lie-item"><strong>1.</strong> <span id="compT1">—</span></div>
+      <div class="truth-lie-item"><strong>2.</strong> <span id="compT2">—</span></div>
+      <div class="truth-lie-item"><strong>3.</strong> <span id="compLie">—</span></div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn reveal" id="compRevealBtn">🔍 Reveal</button>
+    </div>
+    <div id="compExplanation" class="explanation-box hidden"></div>
+
+    <!-- scoring: mark who was correct -->
+    <div style="margin: 16px 0 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;">
+      <span style="font-weight: 500;">✅ Who got it right?</span>
+      <div id="correctMarkers" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+    </div>
+    <div id="scoringStatus" class="scoring-disabled-note"></div>
+
+    <div id="scoreDisplay" class="score-area"></div>
+    <div id="compGameOver" class="win-message hidden"></div>
+    <div class="quit-area">
+      <button class="quit-btn" id="compQuitBtn">✖ Quit Game</button>
+    </div>
+  </div>
+
+  <div class="footer-note">truths: 50 • lies: 25</div>
+</div>
+
+<script>
+  (function() {
+    // ---------- TRUTH & LIE DATASETS (easy to extend) ----------
+    const TRUTHS = [
+      "Bananas are berries, but strawberries aren't.",
+      "A group of flamingos is called a 'flamboyance'.",
+      "The Eiffel Tower can be 15 cm taller in summer.",
+      "Octopuses have three hearts.",
+      "Honey never spoils; edible for thousands of years.",
+      "A day on Venus is longer than a year on Venus.",
+      "The inventor of the microwave oven received only $2 for his patent.",
+      "Cows have best friends and get stressed when separated.",
+      "The human nose can detect over 1 trillion scents.",
+      "Sharks have been around longer than trees.",
+      "The moon has moonquakes.",
+      "Butterflies taste with their feet.",
+      "A jiffy is an actual unit of time (1/100th of a second).",
+      "The shortest war in history lasted 38 minutes.",
+      "Kangaroos can't walk backward.",
+      "An ostrich's eye is bigger than its brain.",
+      "The unicorn is the national animal of Scotland.",
+      "A 'jiffy' is a real time unit.",
+      "The Great Wall of China is not visible from space with the naked eye.",
+      "Polar bear skin is actually black.",
+      "Bubble gum pink is a real color.",
+      "There are more stars in the universe than grains of sand on Earth.",
+      "A bolt of lightning is 5 times hotter than the sun's surface.",
+      "The world's oldest known recipe is for beer.",
+      "The word 'bed' looks like a bed.",
+      "The average person spends 6 months of their life waiting for red lights.",
+      "The first oranges weren't orange; they were green.",
+      "A crocodile can't stick out its tongue.",
+      "The only letter not on the periodic table is J.",
+      "Your stomach acid can dissolve razor blades.",
+      "A 'leap year' happens every 4 years (with exceptions).",
+      "The dot over 'i' is called a tittle.",
+      "The longest word in English has 189,819 letters (titin).",
+      "A group of owls is a 'parliament'.",
+      "The first product to have a barcode was Wrigley's gum.",
+      "There are 206 bones in the adult human body.",
+      "The Amazon River once flowed the other way.",
+      "The color of a person's hair can change with age.",
+      "The largest snowflake ever recorded was 15 inches wide.",
+      "Turtles can breathe through their butts.",
+      "The speed of a sneeze can be over 100 mph.",
+      "Cats have fewer toes on their back paws.",
+      "The left lung is smaller than the right lung.",
+      "The average cloud weighs about 1.1 million pounds.",
+      "An octopus has nine brains.",
+      "The only mammal that can truly fly is the bat.",
+      "The smell of freshly-cut grass is a plant distress signal.",
+      "A 'computer bug' was named after a real moth.",
+      "The longest recorded flight of a chicken is 13 seconds.",
+      "The sun makes up 99.86% of the mass in our solar system."
+    ];
+
+    const LIES = [
+      { lie: "The human body has 206 muscles.", explanation: "Actually, the human body has over 600 muscles; 206 is the number of bones." },
+      { lie: "Bats are blind.", explanation: "Bats are not blind; many use echolocation but have functional eyes." },
+      { lie: "Sharks don't get cancer.", explanation: "Sharks do get cancer, though it's rare; they are not immune." },
+      { lie: "Goldfish have a 3-second memory.", explanation: "Goldfish have memory spans of months, not seconds." },
+      { lie: "Caffeine dehydrates you.", explanation: "Caffeine is a mild diuretic but doesn't cause dehydration in normal amounts." },
+      { lie: "The Great Wall of China is visible from the moon.", explanation: "It's not visible to the naked eye from the moon; only from low orbit." },
+      { lie: "A penny dropped from a skyscraper can kill someone.", explanation: "The penny's terminal velocity is too low to be lethal." },
+      { lie: "Humans use only 10% of their brain.", explanation: "We use most of our brain, even during rest." },
+      { lie: "Chameleons change color to camouflage.", explanation: "They change color for mood, temperature, and communication, not primarily camouflage." },
+      { lie: "The Earth is flat.", explanation: "The Earth is an oblate spheroid; scientific evidence confirms its roundness." },
+      { lie: "Napoleon was short.", explanation: "Napoleon was around 5'7\", average for his time; the 'short' myth came from British propaganda." },
+      { lie: "Eating turkey makes you sleepy due to tryptophan.", explanation: "Turkey has tryptophan, but not more than other meats; sleepiness is from large meals." },
+      { lie: "A black hole is a cosmic vacuum cleaner.", explanation: "Black holes do not suck; they gravitationally attract like any massive object." },
+      { lie: "Vikings wore horned helmets.", explanation: "No historical evidence; it was a 19th-century myth." },
+      { lie: "The Great Sphinx of Giza has a lion's body and a woman's head.", explanation: "The Sphinx has a human head (Pharaoh) and lion body." },
+      { lie: "Bulls get angry at red color.", explanation: "Bulls are colorblind to red; they react to movement." },
+      { lie: "Water conducts electricity.", explanation: "Pure water is a poor conductor; impurities allow conductivity." },
+      { lie: "Dogs sweat by salivating.", explanation: "Dogs sweat mainly through paw pads, not salivation." },
+      { lie: "Mount Everest is the tallest mountain on Earth.", explanation: "Mauna Kea is taller when measured from base to peak; Everest is highest above sea level." },
+      { lie: "The first dynasty of China was the Ming.", explanation: "The first dynasty was the Xia, though often mythical; the Qin was the first imperial." },
+      { lie: "Moths eat wool clothing.", explanation: "Moth larvae eat wool, not adult moths." },
+      { lie: "The fastest animal is the cheetah.", explanation: "The peregrine falcon is fastest (diving), cheetah is fastest on land." },
+      { lie: "The color of the sky is blue because of reflection from the ocean.", explanation: "The sky is blue due to Rayleigh scattering of sunlight by the atmosphere." },
+      { lie: "The human heart is on the left side.", explanation: "The heart is centrally located, slightly tilted left." },
+      { lie: "A diamond is formed from coal.", explanation: "Most diamonds are formed far deeper than coal deposits, though both are carbon." }
+    ];
+
+    // ---------- GAME STATE ----------
+    let players = [];
+    let scores = {};
+    let currentMode = 'fun';
+    let roundLimit = 10;
+    let currentRound = 0;
+    let gameOver = false;
+    let gameStarted = false;
+    let scoredThisQuestion = {};
+
+    // current question data
+    let currentTruths = [];
+    let currentLieObj = null;
+    let currentLieIndex = -1;
+    let revealed = false;
+
+    // DOM refs
+    const funPanel = document.getElementById('funModePanel');
+    const compPanel = document.getElementById('compModePanel');
+    const funModeBtn = document.getElementById('funModeBtn');
+    const compModeBtn = document.getElementById('compModeBtn');
+    const startBtn = document.getElementById('startGameBtn');
+    const startArea = document.getElementById('startArea');
+    const configPanel = document.getElementById('configPanel');
+    const configPanel2 = document.getElementById('configPanel2');
+
+    const playersContainer = document.getElementById('playersContainer');
+    const playerNameInput = document.getElementById('playerNameInput');
+    const addPlayerBtn = document.getElementById('addPlayerBtn');
+
+    const funT1 = document.getElementById('funT1');
+    const funT2 = document.getElementById('funT2');
+    const funLie = document.getElementById('funLie');
+    const funRevealBtn = document.getElementById('funRevealBtn');
+    const funNewBtn = document.getElementById('funNewBtn');
+    const funExplanation = document.getElementById('funExplanation');
+    const funQuitBtn = document.getElementById('funQuitBtn');
+
+    const compT1 = document.getElementById('compT1');
+    const compT2 = document.getElementById('compT2');
+    const compLie = document.getElementById('compLie');
+    const compRevealBtn = document.getElementById('compRevealBtn');
+    const compExplanation = document.getElementById('compExplanation');
+    const compNewQuestionBtn = document.getElementById('compNewQuestionBtn');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const compGameOver = document.getElementById('compGameOver');
+    const correctMarkers = document.getElementById('correctMarkers');
+    const questionCounter = document.getElementById('questionCounter');
+    const scoringStatus = document.getElementById('scoringStatus');
+    const roundSelector = document.getElementById('roundSelector');
+    const compQuitBtn = document.getElementById('compQuitBtn');
+
+    // ---------- helper functions ----------
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function getRandomTruths(count = 2) {
+      const shuffled = shuffleArray([...TRUTHS]);
+      return shuffled.slice(0, count);
+    }
+
+    function getRandomLie() {
+      const idx = Math.floor(Math.random() * LIES.length);
+      return { ...LIES[idx] };
+    }
+
+    function generateQuestion() {
+      const truths = getRandomTruths(2);
+      const lieObj = getRandomLie();
+      const items = [
+        { text: truths[0], isLie: false },
+        { text: truths[1], isLie: false },
+        { text: lieObj.lie, isLie: true }
+      ];
+      shuffleArray(items);
+      const lieIndex = items.findIndex(item => item.isLie === true);
+      return {
+        truths: items.filter(item => !item.isLie).map(item => item.text),
+        lieText: lieObj.lie,
+        lieExplanation: lieObj.explanation,
+        lieIndex: lieIndex,
+        items: items.map(item => item.text)
+      };
+    }
+
+    function renderQuestion(q, t1El, t2El, lieEl, explEl, revealBtn) {
+      t1El.textContent = q.items[0] || '—';
+      t2El.textContent = q.items[1] || '—';
+      lieEl.textContent = q.items[2] || '—';
+      explEl.classList.add('hidden');
+      explEl.textContent = '';
+      revealed = false;
+      revealBtn.dataset.explanation = q.lieExplanation;
+      revealBtn.dataset.lieText = q.lieText;
+    }
+
+    function handleReveal(explanationEl, lieText) {
+      if (revealed) return;
+      explanationEl.textContent = `❌ The lie is: "${lieText}" — ${explanationEl.dataset.explanation || ''}`;
+      explanationEl.classList.remove('hidden');
+      revealed = true;
+      updateScoringUI();
+    }
+
+    // ---------- update players UI ----------
+    function renderPlayers() {
+      playersContainer.innerHTML = '';
+      if (players.length === 0) {
+        const empty = document.createElement('span');
+        empty.textContent = '👤 Add players';
+        empty.style.color = '#b8b09a';
+        empty.style.fontSize = '0.9rem';
+        playersContainer.appendChild(empty);
+        return;
+      }
+      players.forEach(name => {
+        const tag = document.createElement('span');
+        tag.className = 'player-tag';
+        tag.innerHTML = `${name} <button class="remove-btn" data-name="${name}">✕</button>`;
+        playersContainer.appendChild(tag);
+      });
+      document.querySelectorAll('.player-tag .remove-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const name = e.target.dataset.name;
+          removePlayer(name);
+        });
+      });
+      updateScoreDisplay();
+    }
+
+    function addPlayer(name) {
+      const trimmed = name.trim();
+      if (!trimmed) return false;
+      if (players.includes(trimmed)) return false;
+      players.push(trimmed);
+      scores[trimmed] = 0;
+      scoredThisQuestion[trimmed] = false;
+      renderPlayers();
+      updateScoreDisplay();
+      return true;
+    }
+
+    function removePlayer(name) {
+      players = players.filter(p => p !== name);
+      delete scores[name];
+      delete scoredThisQuestion[name];
+      renderPlayers();
+      updateScoreDisplay();
+      if (currentMode === 'competitive') checkGameOver();
+    }
+
+    // ---------- scoring / competitive ----------
+    function updateScoreDisplay() {
+      scoreDisplay.innerHTML = '';
+      if (players.length === 0) {
+        scoreDisplay.innerHTML = '<span style="color:#b8b09a;">Add players to track scores</span>';
+        return;
+      }
+      players.forEach(name => {
+        const badge = document.createElement('span');
+        badge.className = 'score-badge';
+        badge.innerHTML = `${name} <span>${scores[name] || 0}</span>`;
+        scoreDisplay.appendChild(badge);
+      });
+    }
+
+    function renderCorrectMarkers() {
+      correctMarkers.innerHTML = '';
+      if (players.length === 0) {
+        correctMarkers.innerHTML = '<span style="color:#b8b09a;font-size:0.9rem;">No players</span>';
+        return;
+      }
+      players.forEach(name => {
+        const btn = document.createElement('button');
+        btn.textContent = name;
+        btn.className = 'score-btn';
+        btn.dataset.player = name;
+        btn.style.background = '#2b4f3a';
+        btn.style.border = '1px solid #5a7a4b';
+        btn.style.color = '#f3e9d2';
+        btn.style.padding = '6px 14px';
+        btn.style.borderRadius = '40px';
+        btn.style.fontSize = '0.8rem';
+        btn.style.cursor = 'pointer';
+        btn.style.transition = 'all 0.1s';
+        btn.addEventListener('click', () => {
+          if (gameOver || !gameStarted || currentMode !== 'competitive') return;
+          if (!revealed) {
+            alert('Reveal the lie first!');
+            return;
+          }
+          if (scoredThisQuestion[name]) {
+            alert(`${name} already got a point for this question!`);
+            return;
+          }
+          if (scores[name] !== undefined) {
+            scores[name] = (scores[name] || 0) + 1;
+            scoredThisQuestion[name] = true;
+            updateScoreDisplay();
+            updateScoringUI();
+            btn.style.background = '#4a6e3b';
+            btn.style.borderColor = '#7c9a6b';
+            btn.disabled = true;
+          }
+        });
+        correctMarkers.appendChild(btn);
+      });
+      updateScoringUI();
+    }
+
+    function updateScoringUI() {
+      document.querySelectorAll('.score-btn').forEach(btn => {
+        const name = btn.dataset.player;
+        if (scoredThisQuestion[name]) {
+          btn.style.background = '#4a6e3b';
+          btn.style.borderColor = '#7c9a6b';
+          btn.disabled = true;
+        } else if (revealed) {
+          btn.style.background = '#2b4f3a';
+          btn.style.borderColor = '#5a7a4b';
+          btn.disabled = false;
+        } else {
+          btn.style.background = '#2b4f3a';
+          btn.style.borderColor = '#5a7a4b';
+          btn.disabled = true;
+        }
+      });
+
+      if (!revealed) {
+        scoringStatus.textContent = '🔒 Reveal the lie to enable scoring';
+      } else {
+        const scored = Object.values(scoredThisQuestion).filter(v => v === true).length;
+        const total = players.length;
+        if (scored === total && total > 0) {
+          scoringStatus.textContent = '✅ All players have scored for this question!';
+        } else {
+          scoringStatus.textContent = `📝 Click player names to award points (${scored}/${total} scored)`;
+        }
+      }
+    }
+
+    function compNewQuestion() {
+      if (!gameStarted) {
+        alert('Start the game first!');
+        return;
+      }
+      if (gameOver) {
+        resetCompetitiveGame();
+        return;
+      }
+      if (players.length === 0) {
+        alert('Add at least one player for competitive mode.');
+        return;
+      }
+      if (roundLimit !== 0 && currentRound >= roundLimit) {
+        gameOver = true;
+        compGameOver.classList.remove('hidden');
+        compGameOver.textContent = `🏁 Game Over! ${roundLimit} questions completed.`;
+        compNewQuestionBtn.textContent = '🔄 New Game';
+        updateQuestionCounter();
+        scoringStatus.textContent = '⏹️ Game over!';
+        return;
+      }
+
+      // Reset scoring tracking for new question
+      players.forEach(name => {
+        scoredThisQuestion[name] = false;
+      });
+
+      const q = generateQuestion();
+      currentRound++;
+      renderQuestion(q, compT1, compT2, compLie, compExplanation, compRevealBtn);
+      compExplanation.dataset.explanation = q.lieExplanation;
+      compRevealBtn.dataset.lieText = q.lieText;
+      compRevealBtn.dataset.explanation = q.lieExplanation;
+      revealed = false;
+      compGameOver.classList.add('hidden');
+      renderCorrectMarkers();
+      updateScoreDisplay();
+      updateQuestionCounter();
+      scoringStatus.textContent = '🔒 Reveal the lie to enable scoring';
+    }
+
+    function resetCompetitiveGame() {
+      currentRound = 0;
+      gameOver = false;
+      compGameOver.classList.add('hidden');
+      compNewQuestionBtn.textContent = 'Next Q';
+      players.forEach(name => { 
+        scores[name] = 0;
+        scoredThisQuestion[name] = false;
+      });
+      updateScoreDisplay();
+      updateQuestionCounter();
+      scoringStatus.textContent = '🔒 Reveal the lie to enable scoring';
+      if (gameStarted) {
+        compNewQuestion();
+      }
+    }
+
+    function checkGameOver() {
+      if (currentMode === 'competitive' && gameStarted && roundLimit !== 0 && currentRound >= roundLimit) {
+        gameOver = true;
+        compGameOver.classList.remove('hidden');
+        compGameOver.textContent = `🏁 Game Over! ${roundLimit} questions completed.`;
+        compNewQuestionBtn.textContent = '🔄 New Game';
+        updateQuestionCounter();
+        scoringStatus.textContent = '⏹️ Game over!';
+      }
+    }
+
+    function updateQuestionCounter() {
+      const total = roundLimit === 0 ? '∞' : roundLimit;
+      questionCounter.textContent = `Question ${currentRound} / ${total}`;
+    }
+
+    // ---------- Quit game ----------
+    function quitGame() {
+      if (!gameStarted) return;
+      if (!confirm('Are you sure you want to quit the game? Progress will be lost.')) return;
+      resetGameState();
+      // Show config panels
+      configPanel.classList.remove('hidden');
+      configPanel2.classList.remove('hidden');
+      startArea.classList.remove('hidden');
+      // Hide game panels
+      funPanel.classList.add('hidden');
+      compPanel.classList.add('hidden');
+      // Reset scores
+      players.forEach(name => {
+        scores[name] = 0;
+        scoredThisQuestion[name] = false;
+      });
+      updateScoreDisplay();
+      updateQuestionCounter();
+      compGameOver.classList.add('hidden');
+      compNewQuestionBtn.textContent = 'Next Q';
+      funExplanation.classList.add('hidden');
+      compExplanation.classList.add('hidden');
+      scoringStatus.textContent = '';
+      // Re-enable round selector
+      document.querySelectorAll('#roundSelector button').forEach(btn => {
+        btn.disabled = false;
+      });
+      startBtn.disabled = false;
+      startBtn.textContent = '▶ Start Game';
+      gameStarted = false;
+    }
+
+    // ---------- start game ----------
+    function startGame() {
+      if (currentMode === 'competitive' && players.length === 0) {
+        alert('Please add at least one player for Competitive mode.');
+        return;
+      }
+      gameStarted = true;
+      startBtn.disabled = true;
+      startBtn.textContent = '⏳ Game in progress';
+
+      // Hide config panels
+      configPanel.classList.add('hidden');
+      configPanel2.classList.add('hidden');
+      startArea.classList.add('hidden');
+
+      // Disable round selector during game
+      document.querySelectorAll('#roundSelector button').forEach(btn => {
+        btn.disabled = true;
+      });
+
+      if (currentMode === 'fun') {
+        funPanel.classList.remove('hidden');
+        compPanel.classList.add('hidden');
+        generateFunQuestion();
+        scoringStatus.textContent = '';
+      } else {
+        funPanel.classList.add('hidden');
+        compPanel.classList.remove('hidden');
+        // Reset completely before starting
+        currentRound = 0;
+        gameOver = false;
+        players.forEach(name => { 
+          scores[name] = 0;
+          scoredThisQuestion[name] = false;
+        });
+        updateScoreDisplay();
+        updateQuestionCounter();
+        compGameOver.classList.add('hidden');
+        compNewQuestionBtn.textContent = 'Next Q';
+        compNewQuestion(); // This will increment to round 1
+      }
+    }
+
+    // ---------- switch mode ----------
+    function setMode(mode) {
+      if (gameStarted) {
+        if (!confirm('Changing mode will reset the game. Continue?')) return;
+        resetGameState();
+      }
+      currentMode = mode;
+      if (mode === 'fun') {
+        funPanel.classList.add('hidden');
+        compPanel.classList.add('hidden');
+        funModeBtn.classList.add('active');
+        compModeBtn.classList.remove('active');
+        startBtn.disabled = false;
+        startBtn.textContent = '▶ Start Game';
+        gameStarted = false;
+        scoringStatus.textContent = '';
+        // Show config panels
+        configPanel.classList.remove('hidden');
+        configPanel2.classList.remove('hidden');
+        startArea.classList.remove('hidden');
+        // Re-enable round selector
+        document.querySelectorAll('#roundSelector button').forEach(btn => {
+          btn.disabled = false;
+        });
+      } else {
+        funPanel.classList.add('hidden');
+        compPanel.classList.add('hidden');
+        compModeBtn.classList.add('active');
+        funModeBtn.classList.remove('active');
+        startBtn.disabled = false;
+        startBtn.textContent = '▶ Start Game';
+        gameStarted = false;
+        // Reset competitive state
+        currentRound = 0;
+        gameOver = false;
+        players.forEach(name => { 
+          scores[name] = 0;
+          scoredThisQuestion[name] = false;
+        });
+        updateScoreDisplay();
+        updateQuestionCounter();
+        compGameOver.classList.add('hidden');
+        compNewQuestionBtn.textContent = 'Next Q';
+        scoringStatus.textContent = '🔒 Reveal the lie to enable scoring';
+        // Show config panels
+        configPanel.classList.remove('hidden');
+        configPanel2.classList.remove('hidden');
+        startArea.classList.remove('hidden');
+        // Re-enable round selector
+        document.querySelectorAll('#roundSelector button').forEach(btn => {
+          btn.disabled = false;
+        });
+      }
+    }
+
+    function resetGameState() {
+      gameStarted = false;
+      startBtn.disabled = false;
+      startBtn.textContent = '▶ Start Game';
+      gameOver = false;
+      currentRound = 0;
+      players.forEach(name => { 
+        scores[name] = 0;
+        scoredThisQuestion[name] = false;
+      });
+      updateScoreDisplay();
+      compGameOver.classList.add('hidden');
+      compNewQuestionBtn.textContent = 'Next Q';
+      funExplanation.classList.add('hidden');
+      compExplanation.classList.add('hidden');
+      updateQuestionCounter();
+      scoringStatus.textContent = '';
+      // Show config panels
+      configPanel.classList.remove('hidden');
+      configPanel2.classList.remove('hidden');
+      startArea.classList.remove('hidden');
+      // Re-enable round selector
+      document.querySelectorAll('#roundSelector button').forEach(btn => {
+        btn.disabled = false;
+      });
+    }
+
+    function generateFunQuestion() {
+      if (!gameStarted) return;
+      const q = generateQuestion();
+      renderQuestion(q, funT1, funT2, funLie, funExplanation, funRevealBtn);
+      funExplanation.dataset.explanation = q.lieExplanation;
+      funRevealBtn.dataset.lieText = q.lieText;
+      funRevealBtn.dataset.explanation = q.lieExplanation;
+      revealed = false;
+    }
+
+    // ---------- event binding ----------
+    function init() {
+      funModeBtn.addEventListener('click', () => setMode('fun'));
+      compModeBtn.addEventListener('click', () => setMode('competitive'));
+
+      startBtn.addEventListener('click', startGame);
+
+      // Quit buttons
+      funQuitBtn.addEventListener('click', quitGame);
+      compQuitBtn.addEventListener('click', quitGame);
+
+      addPlayerBtn.addEventListener('click', () => {
+        const name = playerNameInput.value.trim();
+        if (addPlayer(name)) {
+          playerNameInput.value = '';
+          if (currentMode === 'competitive') {
+            renderCorrectMarkers();
+            updateScoreDisplay();
+          }
+        } else {
+          alert('Invalid or duplicate name.');
+        }
+      });
+      playerNameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') addPlayerBtn.click();
+      });
+
+      funRevealBtn.addEventListener('click', function() {
+        if (!gameStarted) { alert('Start the game first!'); return; }
+        handleReveal(funExplanation, this.dataset.lieText);
+      });
+      funNewBtn.addEventListener('click', generateFunQuestion);
+
+      compRevealBtn.addEventListener('click', function() {
+        if (!gameStarted) { alert('Start the game first!'); return; }
+        handleReveal(compExplanation, this.dataset.lieText);
+        updateScoringUI();
+      });
+
+      compNewQuestionBtn.addEventListener('click', compNewQuestion);
+
+      // Round selector - always active before game starts
+      document.querySelectorAll('#roundSelector button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (gameStarted) {
+            if (!confirm('Changing round limit will reset the game. Continue?')) return;
+            resetGameState();
+          }
+          document.querySelectorAll('#roundSelector button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          const val = parseInt(this.dataset.round, 10);
+          roundLimit = val;
+          if (currentMode === 'competitive') {
+            updateQuestionCounter();
+            scoringStatus.textContent = '🔒 Reveal the lie to enable scoring';
+          }
+        });
+      });
+
+      renderPlayers();
+      setMode('fun');
+    }
+
+    init();
+  })();
+</script>
+</body>
+</html>
