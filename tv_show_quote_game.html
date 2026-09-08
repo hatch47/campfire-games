@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>TV Quote Quiz</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #1e3a2b;
+      color: #f3e9d2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      margin: 0;
+    }
+
+    #app {
+      max-width: 480px;
+      width: 100%;
+      background: #1e3a2b;
+      border-radius: 32px;
+      padding: 20px 16px 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      border: 1px solid #5a7a4b;
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #f3e9d2;
+      border-bottom: 2px dashed #5a7a4b;
+      padding-bottom: 10px;
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .mode-btn {
+      background: #2b4f3a;
+      border: 2px solid #5a7a4b;
+      color: #f3e9d2;
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex: 1;
+      text-align: center;
+    }
+
+    .mode-btn.active {
+      background: #5a7a4b;
+      border-color: #c4b08a;
+      color: #f3e9d2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .mode-btn:active { transform: scale(0.96); }
+
+    .panel {
+      background: #1e3a2b;
+      border-radius: 24px;
+      padding: 16px 12px;
+      margin-bottom: 20px;
+      border: 1px solid #5a7a4b;
+    }
+
+    .players-area {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      margin-bottom: 6px;
+    }
+
+    .player-tag {
+      background: #2b4f3a;
+      padding: 6px 16px 6px 14px;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      border: 1px solid #5a7a4b;
+    }
+
+    .player-tag .remove-btn {
+      background: none;
+      border: none;
+      color: #d6b68b;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0 2px;
+      line-height: 1;
+    }
+
+    .player-tag .remove-btn:active { opacity: 0.6; }
+
+    .add-player-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .add-player-form input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 60px;
+      border: 1px solid #5a7a4b;
+      background: #2b4f3a;
+      color: #f3e9d2;
+      font-size: 0.95rem;
+      min-width: 120px;
+    }
+
+    .add-player-form input::placeholder { color: #b8b09a; }
+
+    .add-player-form button {
+      background: #5a7a4b;
+      border: none;
+      color: #f3e9d2;
+      padding: 10px 20px;
+      border-radius: 60px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      border: 1px solid #7c9a6b;
+      transition: 0.1s;
+    }
+
+    .add-player-form button:active { background: #4a6e3b; }
+
+    .config-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 8px 0 4px;
+    }
+
+    .config-label {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .round-selector {
+      display: flex;
+      gap: 6px;
+      background: #1e3a2b;
+      padding: 4px;
+      border-radius: 60px;
+      border: 1px solid #5a7a4b;
+    }
+
+    .round-selector button {
+      background: transparent;
+      border: none;
+      color: #f3e9d2;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .round-selector button.active {
+      background: #5a7a4b;
+      color: #f3e9d2;
+    }
+
+    .round-selector button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .show-toggle-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .show-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #2b4f3a;
+      padding: 4px 12px 4px 8px;
+      border-radius: 40px;
+      border: 1px solid #5a7a4b;
+      font-size: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .show-toggle input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #5a7a4b;
+      cursor: pointer;
+    }
+
+    .show-toggle.disabled {
+      opacity: 0.5;
+    }
+
+    .question-box {
+      background: #1e3a2b;
+      padding: 18px 10px;
+      border-radius: 20px;
+      border: 1px solid #5a7a4b;
+      margin: 16px 0 12px;
+    }
+
+    .quote-display {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      padding: 12px 16px;
+      background: #2b4f3a;
+      border-radius: 40px;
+      text-align: center;
+      font-style: italic;
+      border-left: 6px solid #c4b08a;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .answer-details {
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: #2b4f3a;
+      border-radius: 20px;
+      border-left: 6px solid #d6b68b;
+    }
+
+    .answer-details .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid #3a5a4a;
+    }
+
+    .answer-details .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .answer-details .label {
+      font-weight: 600;
+      color: #c4b08a;
+    }
+
+    .answer-details .value {
+      text-align: right;
+      margin-left: 12px;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 18px 0 6px;
+    }
+
+    .action-btn {
+      background: #2b4f3a;
+      border: 2px solid #5a7a4b;
+      color: #f3e9d2;
+      padding: 12px 22px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      flex: 1 0 auto;
+      transition: 0.1s;
+    }
+
+    .action-btn:active { background: #3f664d; }
+    .action-btn.reveal { background: #6d4f3a; border-color: #b28b6b; }
+    .action-btn.primary { background: #4a6e3b; border-color: #7c9a6b; }
+    .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .action-btn.quit { background: #6d3a3a; border-color: #8b4b4b; }
+
+    .competitive-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 12px 0 6px;
+    }
+
+    .score-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 12px;
+      margin: 12px 0 6px;
+    }
+
+    .score-badge {
+      background: #2b4f3a;
+      padding: 4px 14px;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      border: 1px solid #5a7a4b;
+    }
+
+    .score-badge span { font-weight: 700; margin-left: 6px; }
+
+    .win-message {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 12px;
+      background: #2b4f3a;
+      border-radius: 60px;
+      margin: 10px 0;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      text-align: center;
+      color: #b8b09a;
+      margin-top: 16px;
+      opacity: 0.8;
+    }
+
+    .hidden { display: none; }
+    .flex-center { display: flex; justify-content: center; }
+
+    .start-area {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+
+    .start-btn {
+      background: #5a7a4b;
+      border: 2px solid #7c9a6b;
+      color: #f3e9d2;
+      padding: 14px 40px;
+      border-radius: 60px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.1s;
+      width: 100%;
+    }
+
+    .start-btn:active { background: #4a6e3b; }
+    .start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .question-counter {
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+      background: #2b4f3a;
+      padding: 6px 12px;
+      border-radius: 60px;
+      display: inline-block;
+      margin: 0 auto 8px;
+      border: 1px solid #5a7a4b;
+    }
+
+    .scoring-disabled-note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #b8b09a;
+      margin: 8px 0;
+      font-style: italic;
+    }
+
+    .quit-area {
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .quit-btn {
+      background: #6d3a3a;
+      border: 2px solid #8b4b4b;
+      color: #f3e9d2;
+      padding: 10px 30px;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .quit-btn:active { background: #5a2e2e; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <h1>📺 Quote Quiz</h1>
+
+  <!-- mode toggle -->
+  <div class="mode-toggle">
+    <button id="funModeBtn" class="mode-btn active">🎉 Fun</button>
+    <button id="compModeBtn" class="mode-btn">⚔️ Competitive</button>
+  </div>
+
+  <!-- PLAYER PANEL -->
+  <div class="panel" id="configPanel">
+    <div id="playersContainer" class="players-area"></div>
+    <div class="add-player-form">
+      <input type="text" id="playerNameInput" placeholder="Player name" maxlength="20">
+      <button id="addPlayerBtn">+ Add</button>
+    </div>
+  </div>
+
+  <!-- CONFIGURATION -->
+  <div class="panel" id="configPanel2">
+    <div class="config-row">
+      <span class="config-label">📊 Questions:</span>
+      <div class="round-selector" id="roundSelector">
+        <button data-round="10" class="active">10</button>
+        <button data-round="25">25</button>
+        <button data-round="0">∞</button>
+      </div>
+    </div>
+    <div class="config-row" style="margin-top: 12px;">
+      <span class="config-label">📺 Shows:</span>
+    </div>
+    <div class="show-toggle-group" id="showToggleGroup">
+      <!-- Toggles will be generated from QUOTES data -->
+    </div>
+  </div>
+
+  <!-- START BUTTON -->
+  <div class="start-area" id="startArea">
+    <button id="startGameBtn" class="start-btn">▶ Start Game</button>
+  </div>
+
+  <!-- FUN MODE UI -->
+  <div id="funModePanel" class="hidden">
+    <div class="question-box" id="funQuestionBox">
+      <div class="quote-display" id="funQuote">—</div>
+      <div id="funAnswer" class="answer-details hidden">
+        <div class="detail-row"><span class="label">Show:</span><span class="value" id="funShow">—</span></div>
+        <div class="detail-row"><span class="label">Character:</span><span class="value" id="funCharacter">—</span></div>
+        <div class="detail-row"><span class="label">Episode:</span><span class="value" id="funEpisode">—</span></div>
+        <div class="detail-row"><span class="label">Context:</span><span class="value" id="funContext">—</span></div>
+      </div>
+    </div>
+    <div class="action-row">
+      <button class="action-btn" id="funNewBtn">✨ New</button>
+      <button class="action-btn reveal" id="funRevealBtn">🔍 Reveal Answer</button>
+    </div>
+    <div class="quit-area">
+      <button class="quit-btn" id="funQuitBtn">✖ Quit Game</button>
+    </div>
+  </div>
+
+  <!-- COMPETITIVE MODE UI -->
+  <div id="compModePanel" class="hidden">
+    <div class="competitive-controls">
+      <button class="action-btn" id="compNewQuestionBtn" style="flex:0 1 auto; padding: 6px 18px;">Next Q</button>
+    </div>
+
+    <div style="text-align: center;">
+      <span id="questionCounter" class="question-counter">Question 0 / 0</span>
+    </div>
+
+    <div class="question-box" id="compQuestionBox">
+      <div class="quote-display" id="compQuote">—</div>
+      <div id="compAnswer" class="answer-details hidden">
+        <div class="detail-row"><span class="label">Show:</span><span class="value" id="compShow">—</span></div>
+        <div class="detail-row"><span class="label">Character:</span><span class="value" id="compCharacter">—</span></div>
+        <div class="detail-row"><span class="label">Episode:</span><span class="value" id="compEpisode">—</span></div>
+        <div class="detail-row"><span class="label">Context:</span><span class="value" id="compContext">—</span></div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn reveal" id="compRevealBtn">🔍 Reveal Answer</button>
+    </div>
+
+    <!-- scoring: mark who was correct -->
+    <div style="margin: 16px 0 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;">
+      <span style="font-weight: 500;">✅ Who got it right?</span>
+      <div id="correctMarkers" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+    </div>
+    <div id="scoringStatus" class="scoring-disabled-note"></div>
+
+    <div id="scoreDisplay" class="score-area"></div>
+    <div id="compGameOver" class="win-message hidden"></div>
+    <div class="quit-area">
+      <button class="quit-btn" id="compQuitBtn">✖ Quit Game</button>
+    </div>
+  </div>
+
+  <div class="footer-note">quotes loaded: <span id="quoteCount">0</span></div>
+</div>
+
+<script>
+  (function() {
+    // ---------- QUOTE DATASET (easy to extend) ----------
+    const QUOTES = {
+      'The Office (US)': [
+        { quote: "That's what she said.", character: "Michael Scott", episode: "S2E3 - Office Olympics", context: "Michael says this after Jim mentions 'that's what she said' regarding the office Olympics." },
+        { quote: "I'm not superstitious, but I am a little stitious.", character: "Michael Scott", episode: "S2E8 - Performance Review", context: "Michael explains his superstitions." },
+        { quote: "Would I rather be feared or loved? Easy. Both. I want people to be afraid of how much they love me.", character: "Michael Scott", episode: "S2E11 - The Client", context: "Michael tries to give a motivational speech." },
+        { quote: "I declare bankruptcy!", character: "Michael Scott", episode: "S6E16 - The Banker", context: "Michael thinks declaring bankruptcy is a simple process." },
+        { quote: "There's a lot of beauty in ordinary things. Isn't that the point?", character: "Pam Beesly", episode: "S9E25 - Finale", context: "Pam's final line about finding beauty in everyday life." },
+        { quote: "Fact: Bears eat beets. Bears. Beets. Battlestar Galactica.", character: "Jim Halpert", episode: "S3E1 - Gay Witch Hunt", context: "Jim impersonates Dwight's obsession with bears and Battlestar Galactica." },
+        { quote: "Identity theft is not a joke, Jim! Millions of families suffer every year!", character: "Dwight Schrute", episode: "S3E1 - Gay Witch Hunt", context: "Dwight's reaction to Jim impersonating him." },
+        { quote: "I am ready to face any challenges that might be foolish enough to face me.", character: "Dwight Schrute", episode: "S4E3 - Dunder Mifflin Infinity", context: "Dwight's classic overconfidence." },
+        { quote: "Sometimes I'll start a sentence and I don't even know where it's going. I just hope I find it along the way.", character: "Michael Scott", episode: "S4E2 - Dunder Mifflin Infinity", context: "Michael's stream of consciousness style." },
+        { quote: "You miss 100% of the shots you don't take. - Wayne Gretzky", character: "Michael Scott", episode: "S1E3 - The Promotion", context: "Michael misattributes the quote to himself." }
+      ],
+      "It's Always Sunny in Philadelphia": [
+        { quote: "The Gang Solves the Gas Crisis", character: "Dennis Reynolds", episode: "S4E2 - The Gang Solves the Gas Crisis", context: "Dennis is obsessed with the price of gas and comes up with a scheme." },
+        { quote: "I am a golden god!", character: "Dennis Reynolds", episode: "S5E10 - The D.E.N.N.I.S. System", context: "Dennis declares his superiority while implementing his dating system." },
+        { quote: "Dayman! Fighter of the Nightman! Champion of the sun!", character: "Charlie Kelly", episode: "S4E9 - The Nightman Cometh", context: "Charlie's iconic song from his play." },
+        { quote: "Wild card, bitches! Yeeeehaw!", character: "Charlie Kelly", episode: "S4E5 - Mac and Charlie Die", context: "Charlie's wild card philosophy." },
+        { quote: "I eat stickers all the time, dude!", character: "Charlie Kelly", episode: "S2E3 - The Gang Runs for Office", context: "Charlie's bizarre eating habits." },
+        { quote: "I'm not gonna drink this. It's got stickers in it.", character: "Mac", episode: "S4E5 - Mac and Charlie Die", context: "Mac refuses a drink Charlie prepared." },
+        { quote: "Science is a liar sometimes.", character: "Mac", episode: "S8E4 - The Gang Gets Analyzed", context: "Mac's skepticism about science." },
+        { quote: "The economy is a piece of shit. The gang solves the gas crisis.", character: "Frank Reynolds", episode: "S4E2 - The Gang Solves the Gas Crisis", context: "Frank's blunt take on the economy." },
+        { quote: "I'm a man of the people. I'm a man of the people, Charlie.", character: "Frank Reynolds", episode: "S7E9 - The Gang Gets Analyzed", context: "Frank tries to connect with Charlie." },
+        { quote: "I'm gonna get real weird with it.", character: "Frank Reynolds", episode: "S5E8 - The Gang Reignites the Rivalry", context: "Frank's approach to any situation." }
+      ],
+      "Modern Family": [
+        { quote: "I love that my kids are wild and crazy. It keeps me young. And tired.", character: "Claire Dunphy", episode: "S1E1 - Pilot", context: "Claire reflects on her chaotic family life." },
+        { quote: "I'm not a regular mom. I'm a cool mom.", character: "Gloria Delgado-Pritchett", episode: "S1E5 - The Bicycle Thief", context: "Gloria tries to be the cool parent." },
+        { quote: "I can't be your white knight. I'm a brown knight, and I'm here to conquer you.", character: "Jay Pritchett", episode: "S2E19 - The Musical Man", context: "Jay tries to be romantic his own way." },
+        { quote: "Look at this. I'm wearing a tuxedo. I'm the most handsome man in the room. And I have the worst wife.", character: "Jay Pritchett", episode: "S1E21 - Moon Landing", context: "Jay complains about his wife's cooking." },
+        { quote: "I'm a cool dad. That's my thang. I'm hip, I surf the web, I text. I text. LOL: Laugh out loud. OMG: Oh my god. WTF: What the face?", character: "Phil Dunphy", episode: "S1E4 - The Incident", context: "Phil tries to be hip with texting lingo." },
+        { quote: "If you ain't white, you ain't right.", character: "Phil Dunphy", episode: "S1E7 - En Garde", context: "Phil's failed attempt at a cool saying." },
+        { quote: "I'm not a regular dad. I'm a cool dad.", character: "Phil Dunphy", episode: "S1E4 - The Incident", context: "Phil's signature dad catchphrase." },
+        { quote: "The problem with the world is that everybody is a few drinks behind.", character: "Gloria Delgado-Pritchett", episode: "S2E3 - Earthquake", context: "Gloria's philosophy on life." },
+        { quote: "I'm not a pushover. I'm a mother who loves her children.", character: "Claire Dunphy", episode: "S1E12 - The Big Game", context: "Claire defends her parenting style." },
+        { quote: "I'm not a regular dad. I'm a cool dad.", character: "Phil Dunphy", episode: "S1E4 - The Incident", context: "Phil's iconic line about being a cool dad." }
+      ],
+      "Parks and Recreation": [
+        { quote: "I'm a city girl. I've never been to a farm. I've never even been to a farm. I've never been to a farm.", character: "Leslie Knope", episode: "S2E11 - The Stakeout", context: "Leslie's enthusiasm despite her lack of experience." },
+        { quote: "I'm not a feminist, but I'm a feminist.", character: "Leslie Knope", episode: "S1E1 - Pilot", context: "Leslie's complex views on feminism." },
+        { quote: "Sometimes you gotta work a little bit, so you can ball a lot.", character: "Tom Haverford", episode: "S2E14 - The Set Up", context: "Tom's life philosophy." },
+        { quote: "I'm a people person. I love people. I love the people. I love people.", character: "Jerry Gergich", episode: "S2E16 - Sweetums", context: "Jerry tries to be positive." },
+        { quote: "I'm not a regular guy. I'm a cool guy. I'm a cool guy.", character: "Tom Haverford", episode: "S3E4 - Ron and Tammy", context: "Tom's self-image." },
+        { quote: "I'm a leader. I'm a leader. I'm a leader.", character: "Leslie Knope", episode: "S2E12 - The Practice Date", context: "Leslie's self-affirmation." },
+        { quote: "I'm a believer. I believe in things. I believe in people.", character: "Leslie Knope", episode: "S1E1 - Pilot", context: "Leslie's optimistic outlook." },
+        { quote: "I'm not a quitter. I'm a quitter.", character: "April Ludgate", episode: "S2E18 - The Fourth Floor", context: "April's deadpan contradiction." },
+        { quote: "I'm a journalist. I'm a journalist. I'm a journalist.", character: "Ben Wyatt", episode: "S2E24 - Summer Catalog", context: "Ben's dedication to his work." },
+        { quote: "I'm a person. I'm a person. I'm a person.", character: "Andy Dwyer", episode: "S2E20 - Summer Catalog", context: "Andy's simple self-affirmation." }
+      ]
+    };
+
+    // Get show names
+    const showNames = Object.keys(QUOTES);
+
+    // ---------- GAME STATE ----------
+    let players = [];
+    let scores = {};
+    let currentMode = 'fun';
+    let roundLimit = 10;
+    let currentRound = 0;
+    let gameOver = false;
+    let gameStarted = false;
+    let scoredThisQuestion = {};
+    let enabledShows = {};
+    let currentQuote = null;
+
+    // DOM refs
+    const funPanel = document.getElementById('funModePanel');
+    const compPanel = document.getElementById('compModePanel');
+    const funModeBtn = document.getElementById('funModeBtn');
+    const compModeBtn = document.getElementById('compModeBtn');
+    const startBtn = document.getElementById('startGameBtn');
+    const startArea = document.getElementById('startArea');
+    const configPanel = document.getElementById('configPanel');
+    const configPanel2 = document.getElementById('configPanel2');
+    const showToggleGroup = document.getElementById('showToggleGroup');
+    const quoteCountSpan = document.getElementById('quoteCount');
+
+    const playersContainer = document.getElementById('playersContainer');
+    const playerNameInput = document.getElementById('playerNameInput');
+    const addPlayerBtn = document.getElementById('addPlayerBtn');
+
+    const funQuote = document.getElementById('funQuote');
+    const funAnswer = document.getElementById('funAnswer');
+    const funShow = document.getElementById('funShow');
+    const funCharacter = document.getElementById('funCharacter');
+    const funEpisode = document.getElementById('funEpisode');
+    const funContext = document.getElementById('funContext');
+    const funRevealBtn = document.getElementById('funRevealBtn');
+    const funNewBtn = document.getElementById('funNewBtn');
+    const funQuitBtn = document.getElementById('funQuitBtn');
+
+    const compQuote = document.getElementById('compQuote');
+    const compAnswer = document.getElementById('compAnswer');
+    const compShow = document.getElementById('compShow');
+    const compCharacter = document.getElementById('compCharacter');
+    const compEpisode = document.getElementById('compEpisode');
+    const compContext = document.getElementById('compContext');
+    const compRevealBtn = document.getElementById('compRevealBtn');
+    const compNewQuestionBtn = document.getElementById('compNewQuestionBtn');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const compGameOver = document.getElementById('compGameOver');
+    const correctMarkers = document.getElementById('correctMarkers');
+    const questionCounter = document.getElementById('questionCounter');
+    const scoringStatus = document.getElementById('scoringStatus');
+    const roundSelector = document.getElementById('roundSelector');
+    const compQuitBtn = document.getElementById('compQuitBtn');
+
+    // ---------- helper functions ----------
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function getEnabledQuotes() {
+      const enabledList = [];
+      for (const [show, quotes] of Object.entries(QUOTES)) {
+        if (enabledShows[show]) {
+          enabledList.push(...quotes);
+        }
+      }
+      return enabledList;
+    }
+
+    function getRandomQuote() {
+      const enabled = getEnabledQuotes();
+      if (enabled.length === 0) {
+        alert('No shows enabled! Please enable at least one show.');
+        return null;
+      }
+      return enabled[Math.floor(Math.random() * enabled.length)];
+    }
+
+    function renderQuote(q, quoteEl, answerEl, showEl, charEl, epEl, ctxEl) {
+      if (!q) {
+        quoteEl.textContent = 'No quotes available. Enable a show!';
+        answerEl.classList.add('hidden');
+        return;
+      }
+      quoteEl.textContent = `"${q.quote}"`;
+      showEl.textContent = q.show || '—';
+      charEl.textContent = q.character || '—';
+      epEl.textContent = q.episode || '—';
+      ctxEl.textContent = q.context || '—';
+      answerEl.classList.add('hidden');
+    }
+
+    function handleReveal(answerEl) {
+      if (!currentQuote) return;
+      answerEl.classList.remove('hidden');
+    }
+
+    // ---------- Show Toggles ----------
+    function renderShowToggles() {
+      showToggleGroup.innerHTML = '';
+      showNames.forEach(show => {
+        const label = document.createElement('label');
+        label.className = 'show-toggle';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = enabledShows[show] !== false;
+        checkbox.dataset.show = show;
+        checkbox.addEventListener('change', function() {
+          enabledShows[this.dataset.show] = this.checked;
+          updateQuoteCount();
+        });
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(show));
+        showToggleGroup.appendChild(label);
+      });
+      updateQuoteCount();
+    }
+
+    function updateQuoteCount() {
+      const count = getEnabledQuotes().length;
+      quoteCountSpan.textContent = count;
+    }
+
+    // ---------- update players UI ----------
+    function renderPlayers() {
+      playersContainer.innerHTML = '';
+      if (players.length === 0) {
+        const empty = document.createElement('span');
+        empty.textContent = '👤 Add players';
+        empty.style.color = '#b8b09a';
+        empty.style.fontSize = '0.9rem';
+        playersContainer.appendChild(empty);
+        return;
+      }
+      players.forEach(name => {
+        const tag = document.createElement('span');
+        tag.className = 'player-tag';
+        tag.innerHTML = `${name} <button class="remove-btn" data-name="${name}">✕</button>`;
+        playersContainer.appendChild(tag);
+      });
+      document.querySelectorAll('.player-tag .remove-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const name = e.target.dataset.name;
+          removePlayer(name);
+        });
+      });
+      updateScoreDisplay();
+    }
+
+    function addPlayer(name) {
+      const trimmed = name.trim();
+      if (!trimmed) return false;
+      if (players.includes(trimmed)) return false;
+      players.push(trimmed);
+      scores[trimmed] = 0;
+      scoredThisQuestion[trimmed] = false;
+      renderPlayers();
+      updateScoreDisplay();
+      return true;
+    }
+
+    function removePlayer(name) {
+      players = players.filter(p => p !== name);
+      delete scores[name];
+      delete scoredThisQuestion[name];
+      renderPlayers();
+      updateScoreDisplay();
+    }
+
+    // ---------- scoring / competitive ----------
+    function updateScoreDisplay() {
+      scoreDisplay.innerHTML = '';
+      if (players.length === 0) {
+        scoreDisplay.innerHTML = '<span style="color:#b8b09a;">Add players to track scores</span>';
+        return;
+      }
+      players.forEach(name => {
+        const badge = document.createElement('span');
+        badge.className = 'score-badge';
+        badge.innerHTML = `${name} <span>${scores[name] || 0}</span>`;
+        scoreDisplay.appendChild(badge);
+      });
+    }
+
+    function renderCorrectMarkers() {
+      correctMarkers.innerHTML = '';
+      if (players.length === 0) {
+        correctMarkers.innerHTML = '<span style="color:#b8b09a;font-size:0.9rem;">No players</span>';
+        return;
+      }
+      players.forEach(name => {
+        const btn = document.createElement('button');
+        btn.textContent = name;
+        btn.className = 'score-btn';
+        btn.dataset.player = name;
+        btn.style.background = '#2b4f3a';
+        btn.style.border = '1px solid #5a7a4b';
+        btn.style.color = '#f3e9d2';
+        btn.style.padding = '6px 14px';
+        btn.style.borderRadius = '40px';
+        btn.style.fontSize = '0.8rem';
+        btn.style.cursor = 'pointer';
+        btn.style.transition = 'all 0.1s';
+        btn.addEventListener('click', () => {
+          if (gameOver || !gameStarted || currentMode !== 'competitive') return;
+          if (currentQuote === null) {
+            alert('No quote loaded!');
+            return;
+          }
+          if (scoredThisQuestion[name]) {
+            alert(`${name} already got a point for this question!`);
+            return;
+          }
+          if (scores[name] !== undefined) {
+            scores[name] = (scores[name] || 0) + 1;
+            scoredThisQuestion[name] = true;
+            updateScoreDisplay();
+            updateScoringUI();
+            btn.style.background = '#4a6e3b';
+            btn.style.borderColor = '#7c9a6b';
+            btn.disabled = true;
+          }
+        });
+        correctMarkers.appendChild(btn);
+      });
+      updateScoringUI();
+    }
+
+    function updateScoringUI() {
+      document.querySelectorAll('.score-btn').forEach(btn => {
+        const name = btn.dataset.player;
+        if (scoredThisQuestion[name]) {
+          btn.style.background = '#4a6e3b';
+          btn.style.borderColor = '#7c9a6b';
+          btn.disabled = true;
+        } else if (currentQuote && !document.getElementById('compAnswer').classList.contains('hidden')) {
+          btn.style.background = '#2b4f3a';
+          btn.style.borderColor = '#5a7a4b';
+          btn.disabled = false;
+        } else {
+          btn.style.background = '#2b4f3a';
+          btn.style.borderColor = '#5a7a4b';
+          btn.disabled = true;
+        }
+      });
+
+      const answerVisible = !document.getElementById('compAnswer').classList.contains('hidden');
+      if (!answerVisible) {
+        scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+      } else {
+        const scored = Object.values(scoredThisQuestion).filter(v => v === true).length;
+        const total = players.length;
+        if (scored === total && total > 0) {
+          scoringStatus.textContent = '✅ All players have scored for this question!';
+        } else {
+          scoringStatus.textContent = `📝 Click player names to award points (${scored}/${total} scored)`;
+        }
+      }
+    }
+
+    function compNewQuestion() {
+      if (!gameStarted) {
+        alert('Start the game first!');
+        return;
+      }
+      if (gameOver) {
+        resetCompetitiveGame();
+        return;
+      }
+      if (players.length === 0) {
+        alert('Add at least one player for competitive mode.');
+        return;
+      }
+      if (roundLimit !== 0 && currentRound >= roundLimit) {
+        gameOver = true;
+        compGameOver.classList.remove('hidden');
+        compGameOver.textContent = `🏁 Game Over! ${roundLimit} questions completed.`;
+        compNewQuestionBtn.textContent = '🔄 New Game';
+        updateQuestionCounter();
+        scoringStatus.textContent = '⏹️ Game over!';
+        return;
+      }
+
+      // Reset scoring tracking for new question
+      players.forEach(name => {
+        scoredThisQuestion[name] = false;
+      });
+
+      const q = getRandomQuote();
+      if (!q) {
+        alert('No enabled shows with quotes! Please enable at least one show.');
+        return;
+      }
+      currentQuote = q;
+      currentRound++;
+      renderQuote(q, compQuote, compAnswer, compShow, compCharacter, compEpisode, compContext);
+      compGameOver.classList.add('hidden');
+      renderCorrectMarkers();
+      updateScoreDisplay();
+      updateQuestionCounter();
+      scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+    }
+
+    function resetCompetitiveGame() {
+      currentRound = 0;
+      gameOver = false;
+      compGameOver.classList.add('hidden');
+      compNewQuestionBtn.textContent = 'Next Q';
+      players.forEach(name => { 
+        scores[name] = 0;
+        scoredThisQuestion[name] = false;
+      });
+      updateScoreDisplay();
+      updateQuestionCounter();
+      scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+      if (gameStarted) {
+        compNewQuestion();
+      }
+    }
+
+    function updateQuestionCounter() {
+      const total = roundLimit === 0 ? '∞' : roundLimit;
+      questionCounter.textContent = `Question ${currentRound} / ${total}`;
+    }
+
+    // ---------- Quit game ----------
+    function quitGame() {
+      if (!gameStarted) return;
+      if (!confirm('Are you sure you want to quit the game? Progress will be lost.')) return;
+      resetGameState();
+      configPanel.classList.remove('hidden');
+      configPanel2.classList.remove('hidden');
+      startArea.classList.remove('hidden');
+      funPanel.classList.add('hidden');
+      compPanel.classList.add('hidden');
+      players.forEach(name => {
+        scores[name] = 0;
+        scoredThisQuestion[name] = false;
+      });
+      updateScoreDisplay();
+      updateQuestionCounter();
+      compGameOver.classList.add('hidden');
+      compNewQuestionBtn.textContent = 'Next Q';
+      document.querySelectorAll('#roundSelector button').forEach(btn => {
+        btn.disabled = false;
+      });
+      startBtn.disabled = false;
+      startBtn.textContent = '▶ Start Game';
+      gameStarted = false;
+      currentQuote = null;
+    }
+
+    // ---------- start game ----------
+    function startGame() {
+      const enabled = getEnabledQuotes();
+      if (enabled.length === 0) {
+        alert('Please enable at least one show with quotes!');
+        return;
+      }
+      if (currentMode === 'competitive' && players.length === 0) {
+        alert('Please add at least one player for Competitive mode.');
+        return;
+      }
+      gameStarted = true;
+      startBtn.disabled = true;
+      startBtn.textContent = '⏳ Game in progress';
+
+      configPanel.classList.add('hidden');
+      configPanel2.classList.add('hidden');
+      startArea.classList.add('hidden');
+
+      document.querySelectorAll('#roundSelector button').forEach(btn => {
+        btn.disabled = true;
+      });
+
+      if (currentMode === 'fun') {
+        funPanel.classList.remove('hidden');
+        compPanel.classList.add('hidden');
+        generateFunQuestion();
+        scoringStatus.textContent = '';
+      } else {
+        funPanel.classList.add('hidden');
+        compPanel.classList.remove('hidden');
+        currentRound = 0;
+        gameOver = false;
+        players.forEach(name => { 
+          scores[name] = 0;
+          scoredThisQuestion[name] = false;
+        });
+        updateScoreDisplay();
+        updateQuestionCounter();
+        compGameOver.classList.add('hidden');
+        compNewQuestionBtn.textContent = 'Next Q';
+        compNewQuestion();
+      }
+    }
+
+    // ---------- switch mode ----------
+    function setMode(mode) {
+      if (gameStarted) {
+        if (!confirm('Changing mode will reset the game. Continue?')) return;
+        resetGameState();
+      }
+      currentMode = mode;
+      if (mode === 'fun') {
+        funPanel.classList.add('hidden');
+        compPanel.classList.add('hidden');
+        funModeBtn.classList.add('active');
+        compModeBtn.classList.remove('active');
+        startBtn.disabled = false;
+        startBtn.textContent = '▶ Start Game';
+        gameStarted = false;
+        scoringStatus.textContent = '';
+        configPanel.classList.remove('hidden');
+        configPanel2.classList.remove('hidden');
+        startArea.classList.remove('hidden');
+        document.querySelectorAll('#roundSelector button').forEach(btn => {
+          btn.disabled = false;
+        });
+      } else {
+        funPanel.classList.add('hidden');
+        compPanel.classList.add('hidden');
+        compModeBtn.classList.add('active');
+        funModeBtn.classList.remove('active');
+        startBtn.disabled = false;
+        startBtn.textContent = '▶ Start Game';
+        gameStarted = false;
+        currentRound = 0;
+        gameOver = false;
+        players.forEach(name => { 
+          scores[name] = 0;
+          scoredThisQuestion[name] = false;
+        });
+        updateScoreDisplay();
+        updateQuestionCounter();
+        compGameOver.classList.add('hidden');
+        compNewQuestionBtn.textContent = 'Next Q';
+        scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+        configPanel.classList.remove('hidden');
+        configPanel2.classList.remove('hidden');
+        startArea.classList.remove('hidden');
+        document.querySelectorAll('#roundSelector button').forEach(btn => {
+          btn.disabled = false;
+        });
+      }
+    }
+
+    function resetGameState() {
+      gameStarted = false;
+      startBtn.disabled = false;
+      startBtn.textContent = '▶ Start Game';
+      gameOver = false;
+      currentRound = 0;
+      players.forEach(name => { 
+        scores[name] = 0;
+        scoredThisQuestion[name] = false;
+      });
+      updateScoreDisplay();
+      compGameOver.classList.add('hidden');
+      compNewQuestionBtn.textContent = 'Next Q';
+      updateQuestionCounter();
+      scoringStatus.textContent = '';
+      configPanel.classList.remove('hidden');
+      configPanel2.classList.remove('hidden');
+      startArea.classList.remove('hidden');
+      document.querySelectorAll('#roundSelector button').forEach(btn => {
+        btn.disabled = false;
+      });
+    }
+
+    function generateFunQuestion() {
+      if (!gameStarted) return;
+      const q = getRandomQuote();
+      if (!q) {
+        alert('No enabled shows with quotes! Please enable at least one show.');
+        return;
+      }
+      currentQuote = q;
+      renderQuote(q, funQuote, funAnswer, funShow, funCharacter, funEpisode, funContext);
+    }
+
+    // ---------- event binding ----------
+    function init() {
+      // Initialize enabled shows
+      showNames.forEach(show => {
+        enabledShows[show] = true;
+      });
+      renderShowToggles();
+
+      funModeBtn.addEventListener('click', () => setMode('fun'));
+      compModeBtn.addEventListener('click', () => setMode('competitive'));
+
+      startBtn.addEventListener('click', startGame);
+
+      funQuitBtn.addEventListener('click', quitGame);
+      compQuitBtn.addEventListener('click', quitGame);
+
+      addPlayerBtn.addEventListener('click', () => {
+        const name = playerNameInput.value.trim();
+        if (addPlayer(name)) {
+          playerNameInput.value = '';
+          if (currentMode === 'competitive') {
+            renderCorrectMarkers();
+            updateScoreDisplay();
+          }
+        } else {
+          alert('Invalid or duplicate name.');
+        }
+      });
+      playerNameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') addPlayerBtn.click();
+      });
+
+      funRevealBtn.addEventListener('click', function() {
+        if (!gameStarted) { alert('Start the game first!'); return; }
+        if (!currentQuote) return;
+        handleReveal(funAnswer);
+      });
+      funNewBtn.addEventListener('click', generateFunQuestion);
+
+      compRevealBtn.addEventListener('click', function() {
+        if (!gameStarted) { alert('Start the game first!'); return; }
+        if (!currentQuote) return;
+        handleReveal(compAnswer);
+        updateScoringUI();
+      });
+
+      compNewQuestionBtn.addEventListener('click', compNewQuestion);
+
+      document.querySelectorAll('#roundSelector button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (gameStarted) {
+            if (!confirm('Changing round limit will reset the game. Continue?')) return;
+            resetGameState();
+          }
+          document.querySelectorAll('#roundSelector button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          const val = parseInt(this.dataset.round, 10);
+          roundLimit = val;
+          if (currentMode === 'competitive') {
+            updateQuestionCounter();
+            scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+          }
+        });
+      });
+
+      renderPlayers();
+      setMode('fun');
+    }
+
+    init();
+  })();
+</script>
+</body>
+</html>
