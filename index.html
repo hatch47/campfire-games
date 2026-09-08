@@ -1,7 +1,163 @@
-<h1>Campfire Games</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Campfire Games</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<p>Choose a game:</p>
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #1e3a2b;
+      color: #f3e9d2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      margin: 0;
+    }
 
-<a href="2_truths_1_lie/2_truths_1_lie_game.html">2 Truths 1 Lie</a>
-<a href="mafia/mafia_game.html">Mafia</a>
-<a href="tv_show_quotes/tv_show_quotes_game.html">TV Show Quotes</a>
+    #app {
+      max-width: 480px;
+      width: 100%;
+      background: #1e3a2b;
+      border-radius: 32px;
+      padding: 30px 20px 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      border: 1px solid #5a7a4b;
+      text-align: center;
+    }
+
+    h1 {
+      font-weight: 600;
+      letter-spacing: 2px;
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+      color: #f3e9d2;
+      border-bottom: 2px dashed #5a7a4b;
+      padding-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #c4b08a;
+      margin-bottom: 28px;
+      margin-top: 4px;
+    }
+
+    .games-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .game-card {
+      background: #2b4f3a;
+      border: 2px solid #5a7a4b;
+      border-radius: 20px;
+      padding: 20px 18px;
+      text-decoration: none;
+      color: #f3e9d2;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .game-card:active {
+      transform: scale(0.97);
+      background: #3a5f4a;
+      border-color: #7c9a6b;
+    }
+
+    .game-card .game-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .game-card .game-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .game-card .game-desc {
+      font-size: 0.85rem;
+      color: #b8b09a;
+    }
+
+    .game-card .game-emoji {
+      font-size: 2.2rem;
+      flex-shrink: 0;
+    }
+
+    .game-card .arrow {
+      color: #5a7a4b;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      transition: 0.1s;
+    }
+
+    .game-card:hover .arrow {
+      color: #c4b08a;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      text-align: center;
+      color: #5a7a4b;
+      margin-top: 28px;
+      opacity: 0.7;
+      border-top: 1px solid #2b4f3a;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>🔥 Campfire Games</h1>
+    <p class="subtitle">Gather your friends and play!</p>
+
+    <div class="games-grid">
+      <a href="2_truths_1_lie/2_truths_1_lie_game.html" class="game-card">
+        <div class="game-info">
+          <span class="game-name">2 Truths 1 Lie</span>
+          <span class="game-desc">Can you spot the lie?</span>
+        </div>
+        <span class="game-emoji">🎭</span>
+        <span class="arrow">›</span>
+      </a>
+
+      <a href="mafia/mafia_game.html" class="game-card">
+        <div class="game-info">
+          <span class="game-name">Mafia</span>
+          <span class="game-desc">Who's the imposter?</span>
+        </div>
+        <span class="game-emoji">🕵️</span>
+        <span class="arrow">›</span>
+      </a>
+
+      <a href="tv_show_quotes/tv_show_quotes_game.html" class="game-card">
+        <div class="game-info">
+          <span class="game-name">TV Show Quotes</span>
+          <span class="game-desc">Name that show &amp; character</span>
+        </div>
+        <span class="game-emoji">📺</span>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+
+    <div class="footer-note">✦ choose your adventure ✦</div>
+  </div>
+</body>
+</html>
