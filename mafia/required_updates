@@ -1,0 +1,8 @@
+Required Updates:
+- Remove some emojis
+- Rename in code to "Mafia"
+- instructions to indicate:
+  - players are allowed to tell each other their roles during trial, but also allowed to lie about their roles
+- when doctor saves someone, the host shouldn't say who was saved, only that there was an attempted murder, but the doctor saved them
+- add a quit game button
+- make deaths more intense and less silly
