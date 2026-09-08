@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Murder Mystery · Host</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1a3a2a;
+      color: #f5e6c8;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      padding: 1rem 1rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #app {
+      max-width: 500px;
+      width: 100%;
+      background: rgba(0,0,0,0.25);
+      border-radius: 28px;
+      padding: 1.5rem 1.2rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+    h1, h2, h3 { font-weight: 400; letter-spacing: 0.5px; border-bottom: 1px solid #6a8f7a; padding-bottom: 0.3rem; margin: 0.2rem 0 1rem; }
+    h1 { font-size: 1.8rem; text-align: center; border-bottom: 2px solid #b8a78b; }
+    h2 { font-size: 1.4rem; }
+    h3 { font-size: 1.1rem; border-bottom: 1px dashed #6a8f7a; }
+    .card {
+      background: #1f4a33;
+      border-radius: 20px;
+      padding: 1rem 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: inset 0 1px 4px #3d6b50;
+    }
+    .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin: 0.4rem 0; }
+    .label { font-weight: 500; min-width: 80px; }
+    input[type="text"] {
+      background: #2b543b; border: 1px solid #6f977a; color: #f5e6c8;
+      padding: 0.5rem 0.7rem; border-radius: 30px; font-size: 1rem; flex: 1; min-width: 140px;
+    }
+    input[type="text"]:focus { border-color: #d4c3a8; background: #2d5a3e; outline: none; }
+    input[type="checkbox"] { width: 1.3rem; height: 1.3rem; accent-color: #b8a78b; transform: scale(1.1); margin-right: 0.2rem; }
+    .btn {
+      background: #3f6b51; border: none; border-radius: 40px; color: #f5e6c8;
+      padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 500; cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3); border: 1px solid #5f8a6b;
+      touch-action: manipulation; transition: 0.08s;
+    }
+    .btn:active { background: #2d543b; transform: scale(0.96); }
+    .btn-secondary { background: #4d5f4a; border-color: #6f7f67; }
+    .btn-danger { background: #6f4a3f; border-color: #8f6355; }
+    .btn-success { background: #3f7a4f; border-color: #5f9a6b; }
+    .btn-block { width: 100%; padding: 0.7rem; margin: 0.3rem 0; font-size: 1.1rem; }
+    .btn-warning { background: #8f7a3f; border-color: #b8a35f; }
+    .chip-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.3rem 0 0.6rem; }
+    .chip {
+      background: #2b543b; padding: 0.3rem 0.9rem; border-radius: 40px;
+      border: 1px solid #6f977a; display: inline-flex; align-items: center; gap: 0.6rem;
+    }
+    .chip .remove { background: #6f4a3f; border-radius: 50%; width: 1.4rem; height: 1.4rem; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 1px solid #9f7a6a; font-size: 0.9rem; }
+    .radio-group { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; align-items: center; background: #1f4a33; padding: 0.6rem 0.8rem; border-radius: 40px; margin: 0.2rem 0; }
+    .radio-group label { display: flex; align-items: center; gap: 0.3rem; }
+    .status-box { background: #1c3f2d; border-left: 4px solid #b8a78b; padding: 0.7rem 1rem; border-radius: 16px; margin: 0.8rem 0; font-size: 0.95rem; }
+    .muted { opacity: 0.7; font-size: 0.9rem; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    hr { border: 0.5px solid #3d6b50; margin: 1rem 0; }
+    .player-tag { background: #2d5a3e; border-radius: 30px; padding: 0.1rem 0.8rem; display: inline-block; margin: 0.2rem 0.2rem; }
+    .cycle-step { background: #1f4a33; padding: 0.8rem 1rem; border-radius: 30px; margin: 0.5rem 0; border: 1px solid #5f8a6b; }
+    .death-msg { font-style: italic; background: #2a3f2a; padding: 0.6rem; border-radius: 20px; margin: 0.5rem 0; border-left: 3px solid #b8a78b; }
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center;
+      z-index: 999; padding: 1rem;
+    }
+    .modal-box {
+      background: #1f4a33; max-width: 450px; width: 100%; max-height: 80vh;
+      border-radius: 30px; padding: 1.5rem; overflow-y: auto;
+      border: 1px solid #6f977a; box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+    }
+    .modal-box h2 { border-bottom: 1px solid #6a8f7a; }
+    .modal-box .close-btn { float: right; background: #6f4a3f; border: none; color: #f5e6c8; border-radius: 40px; padding: 0.2rem 1rem; cursor: pointer; }
+    .btn-group { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .btn-group .btn { flex: 1; min-width: 80px; }
+    .kill-select-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
+    .kill-select-grid .btn { flex: 1 0 40%; }
+    .trial-msg { background: #2a3f2a; padding: 0.6rem; border-radius: 16px; margin: 0.5rem 0; border-left: 3px solid #b8a78b; }
+  </style>
+</head>
+<body>
+<div id="app"><div id="ui"></div></div>
+<script>
+(function(){
+  // ----- STATE -----
+  let state = {
+    players: [],
+    config: { killerMode: '1', doctorEnabled: true, detectiveEnabled: false },
+    game: null,
+    showHelp: false,
+  };
+
+  // ----- 50+ DEATH MESSAGES -----
+  const DEATH_MESSAGES = [
+    "tripped over a rubber chicken and fell into a woodchipper",
+    "was tragically suffocated by a rogue balloon animal",
+    "was mistaken for a piñata at a children's party",
+    "tried to fight a badger and lost",
+    "was struck by a falling anvil (ACME approved)",
+    "drank cursed tea and turned into a garden gnome",
+    "was hugged too tightly by a deranged robot",
+    "fell into a vat of maple syrup and drowned",
+    "was poked to death by a very determined squirrel",
+    "exploded after eating a suspicious burrito",
+    "was flattened by a runaway steamroller",
+    "got tangled in a murder of crows and never escaped",
+    "was challenged to a dance-off and lost their life",
+    "accidentally summoned a demon while reading a cookbook",
+    "was chased off a cliff by a herd of aggressive sheep",
+    "sneezed so hard they un-existed",
+    "was turned into a newt (but got better)",
+    "was sat on by a giant marshmallow",
+    "fell through a portal to the sock dimension",
+    "was defeated by a goose with a grudge",
+    "tried to pet a wild moose and regretted it",
+    "was baked into a pie by a rogue baker",
+    "was struck by lightning twice (bad luck)",
+    "was kidnapped by pirates and made to walk the plank",
+    "was smothered by a swarm of glitter",
+    "was beaten at their own game by a cat",
+    "fell into a well and found a monster",
+    "was turned into stone by a medusa with great aim",
+    "was eaten by a giant frog (ribbit)",
+    "was lost in a corn maze forever",
+    "was hit by a stray boomerang from 1995",
+    "was challenged to a duel and lost to a ghost",
+    "was melted by a really, really hot pizza",
+    "was dragged under by a vengeful rubber duck",
+    "was obliterated by a cosmic ray burp",
+    "was tricked into buying a haunted vase",
+    "was defeated by a mime in a battle of wills",
+    "was swallowed by a giant gummy worm",
+    "was turned into a fine mist by a malfunctioning teleporter",
+    "was given a cursed high-five",
+    "was out-stared by a cat and disintegrated",
+    "was exploded by a confetti cannon",
+    "was trapped in a snow globe and shaken",
+    "was defeated by a swarm of angry bees with a vendetta",
+    "was force-fed a ghost pepper and combusted",
+    "was turned into a lawn ornament",
+    "was lost in a game of hide-and-seek for eternity",
+    "was eaten by a bookworm (the literary kind)",
+    "was flattened by a falling piano (classic)",
+    "was simply too fabulous and vanished",
+    "was outrun by a snail and died of shame",
+    "was baked into a cake and served at a party",
+    "was defeated by a puzzle with no solution",
+    "was turned into a frog and then stepped on",
+    "was struck by a stray meteorite (bad day)",
+    "was swallowed by a giant jellyfish",
+  ];
+
+  function randomDeath() { return DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]; }
+
+  const ui = document.getElementById('ui');
+
+  function render() {
+    if (state.showHelp) { renderHelpModal(); return; }
+    if (state.game && state.game.active) { renderGame(); }
+    else { renderSetup(); }
+  }
+
+  // ----- HELP MODAL -----
+  function renderHelpModal() {
+    const helpHtml = `
+      <div class="modal-overlay" id="helpOverlay">
+        <div class="modal-box">
+          <button class="close-btn" id="helpCloseBtn">✕ close</button>
+          <h2>📖 Role Guide</h2>
+          <p><strong>Killer (1 or 2):</strong> choose one player to murder each night.</p>
+          <p><strong>Mastermind + Hitman:</strong> Mastermind chooses the target, Hitman executes. Both are killers.</p>
+          <p><strong>Doctor:</strong> each night, choose one player to save from murder.</p>
+          <p><strong>Detective:</strong> each night, guess one player you think is a killer. If correct, that killer is caught and removed.</p>
+          <p><strong>Civilian:</strong> no special powers, but you vote in trials.</p>
+          <hr>
+          <h3>⚖️ Trial phase</h3>
+          <p>After the night's results, players discuss and accuse. When <strong>2 players accuse the same person</strong>, that person goes on trial. They defend themselves, then everyone votes. If <strong>majority vote guilty</strong>, they are executed and removed.</p>
+          <p class="muted">The host will select the executed player after the trial.</p>
+          <hr>
+          <p class="muted">Host selects all actions manually via buttons.</p>
+          <button class="btn btn-block" id="helpCloseBtn2">Got it</button>
+        </div>
+      </div>
+    `;
+    const modal = document.createElement('div');
+    modal.innerHTML = helpHtml;
+    document.body.appendChild(modal.firstElementChild);
+    document.getElementById('helpCloseBtn').addEventListener('click', closeHelp);
+    document.getElementById('helpCloseBtn2').addEventListener('click', closeHelp);
+    document.getElementById('helpOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeHelp();
+    });
+  }
+  function closeHelp() {
+    state.showHelp = false;
+    const overlay = document.getElementById('helpOverlay');
+    if (overlay) overlay.remove();
+    render();
+  }
+
+  // ----- SETUP VIEW -----
+  function renderSetup() {
+    const p = state.players;
+    const cfg = state.config;
+    let html = `<h1>🕵️ MURDER MYSTERY</h1>`;
+    html += `<div style="text-align:right;"><button class="btn btn-secondary" id="helpSetupBtn">📖 Instructions</button></div>`;
+    html += `<div class="card"><h2>Players</h2><div class="row">`;
+    html += `<input type="text" id="playerInput" placeholder="Add name" />`;
+    html += `<button class="btn" id="addPlayerBtn">+</button></div>`;
+    html += `<div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.6rem;">`;
+    if (p.length === 0) html += `<span class="muted">No players</span>`;
+    p.forEach((name, idx) => {
+      html += `<span class="chip">${name} <span class="remove" data-idx="${idx}">✕</span></span>`;
+    });
+    html += `</div></div>`;
+
+    html += `<div class="card"><h2>Roles</h2>`;
+    html += `<div class="radio-group">`;
+    const modes = [
+      { val: '1', label: '1 killer' },
+      { val: '2', label: '2 killers' },
+      { val: 'mastermind', label: 'Mastermind + Hitman' },
+      { val: 'random', label: '🎲 Random (secret)' }
+    ];
+    modes.forEach(m => {
+      const checked = cfg.killerMode === m.val ? 'checked' : '';
+      html += `<label><input type="radio" name="killerMode" value="${m.val}" ${checked} /> ${m.label}</label>`;
+    });
+    html += `</div>`;
+    html += `<div class="row" style="margin-top:0.8rem;">`;
+    html += `<label><input type="checkbox" id="doctorChk" ${cfg.doctorEnabled ? 'checked' : ''} /> Doctor</label>`;
+    html += `<label><input type="checkbox" id="detectiveChk" ${cfg.detectiveEnabled ? 'checked' : ''} /> Detective</label>`;
+    html += `</div></div>`;
+
+    html += `<button class="btn btn-success btn-block" id="startGameBtn">⚔️ Start Game</button>`;
+    html += `<div class="status-box muted">${p.length} players · ${getModeLabel(cfg.killerMode)} · Doctor ${cfg.doctorEnabled ? 'on' : 'off'} · Detective ${cfg.detectiveEnabled ? 'on' : 'off'}</div>`;
+
+    ui.innerHTML = html;
+
+    document.getElementById('addPlayerBtn').addEventListener('click', function() {
+      const inp = document.getElementById('playerInput');
+      const name = inp.value.trim();
+      if (name && !state.players.includes(name)) { state.players.push(name); inp.value = ''; render(); }
+      else if (name) alert('Player already added');
+    });
+    document.getElementById('playerInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('addPlayerBtn').click(); });
+    document.querySelectorAll('.chip .remove').forEach(el => {
+      el.addEventListener('click', function() {
+        state.players.splice(parseInt(this.dataset.idx, 10), 1);
+        render();
+      });
+    });
+    document.querySelectorAll('input[name="killerMode"]').forEach(radio => {
+      radio.addEventListener('change', function() { state.config.killerMode = this.value; render(); });
+    });
+    document.getElementById('doctorChk').addEventListener('change', function() { state.config.doctorEnabled = this.checked; render(); });
+    document.getElementById('detectiveChk').addEventListener('change', function() { state.config.detectiveEnabled = this.checked; render(); });
+    document.getElementById('startGameBtn').addEventListener('click', function() {
+      if (state.players.length < 3) { alert('Need at least 3 players'); return; }
+      startGame();
+    });
+    document.getElementById('helpSetupBtn').addEventListener('click', function() { state.showHelp = true; render(); });
+  }
+
+  function getModeLabel(mode) {
+    if (mode === '1') return '1 killer';
+    if (mode === '2') return '2 killers';
+    if (mode === 'mastermind') return 'Mastermind+Hitman';
+    return 'Random (hidden)';
+  }
+
+  // ----- START GAME -----
+  function startGame() {
+    const players = state.players.slice();
+    const cfg = state.config;
+    let killerMode = cfg.killerMode;
+    if (killerMode === 'random') {
+      const opts = ['1', '2', 'mastermind'];
+      killerMode = opts[Math.floor(Math.random() * opts.length)];
+    }
+    const shuffled = [...players];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    let roleMap = {};
+    let remaining = [...shuffled];
+    let killers = [];
+    let mastermind = null, hitman = null;
+
+    if (killerMode === '1') {
+      const k = remaining.pop();
+      killers = [k];
+      roleMap[k] = 'killer';
+    } else if (killerMode === '2') {
+      const k1 = remaining.pop(), k2 = remaining.pop();
+      killers = [k1, k2];
+      roleMap[k1] = 'killer'; roleMap[k2] = 'killer';
+    } else if (killerMode === 'mastermind') {
+      if (remaining.length < 2) { alert('Need at least 2 players for mastermind'); return; }
+      const master = remaining.pop(), hit = remaining.pop();
+      mastermind = master; hitman = hit;
+      killers = [master, hit];
+      roleMap[master] = 'mastermind'; roleMap[hit] = 'hitman';
+    }
+    let doctor = null, detective = null;
+    if (cfg.doctorEnabled && remaining.length > 0) {
+      doctor = remaining.pop();
+      roleMap[doctor] = 'doctor';
+    }
+    if (cfg.detectiveEnabled && remaining.length > 0) {
+      detective = remaining.pop();
+      roleMap[detective] = 'detective';
+    }
+    remaining.forEach(p => { roleMap[p] = 'civilian'; });
+
+    const game = {
+      active: true,
+      players: players,
+      roleMap: roleMap,
+      killerMode: killerMode,
+      killers: killers,
+      doctor: doctor,
+      detective: detective,
+      mastermind: mastermind,
+      hitman: hitman,
+      alive: players.slice(),
+      phase: 'night',
+      nightStep: 0,
+      victim: null,
+      saved: null,
+      detectiveGuess: null,
+      killerCaught: false,
+      cycle: 0,
+      gameOver: false,
+      winner: null,
+      deathMessage: '',
+      trialPhase: 'idle', // 'idle' | 'active' | 'done'
+      trialAccused: null,
+      executedThisCycle: false,
+    };
+    state.game = game;
+    render();
+  }
+
+  // ----- GAME VIEW -----
+  function renderGame() {
+    const g = state.game;
+    if (!g || !g.active) { renderSetup(); return; }
+
+    let html = `<h1>🔍 HOST DASHBOARD</h1>`;
+    html += `<div style="text-align:right;"><button class="btn btn-secondary" id="helpGameBtn">📖 Instructions</button></div>`;
+    html += `<div class="card"><div class="flex-between"><span>Cycle ${g.cycle+1}</span><span>${g.alive.length} alive</span></div>`;
+    html += `<div style="margin:0.5rem 0;">`;
+    g.alive.forEach(name => {
+      const role = g.roleMap[name] || 'civilian';
+      html += `<span class="player-tag">${name} (${role})</span> `;
+    });
+    html += `</div>`;
+
+    if (g.gameOver) {
+      html += `<div class="status-box">🏁 GAME OVER · ${g.winner || 'unknown'} wins</div>`;
+      html += `<button class="btn btn-secondary btn-block" id="backToSetupBtn">↩ Back to setup</button>`;
+      ui.innerHTML = html;
+      document.getElementById('backToSetupBtn').addEventListener('click', function() { state.game = null; render(); });
+      document.getElementById('helpGameBtn').addEventListener('click', function() { state.showHelp = true; render(); });
+      return;
+    }
+
+    if (g.phase === 'night') {
+      html += renderNightPhase(g);
+    } else if (g.phase === 'trial') {
+      html += renderTrialPhase(g);
+    } else if (g.phase === 'day') {
+      html += renderDayPhase(g);
+    }
+
+    ui.innerHTML = html;
+    document.getElementById('helpGameBtn').addEventListener('click', function() { state.showHelp = true; render(); });
+    bindNightEvents(g);
+    bindTrialEvents(g);
+    bindDayEvents(g);
+  }
+
+  // ----- NIGHT PHASE -----
+  function renderNightPhase(g) {
+    let html = `<div class="cycle-step"><p><strong>🌙 Night ${g.cycle+1}</strong></p>`;
+    const step = g.nightStep;
+    if (step === 0) {
+      html += `<p>Step 1: Killers wake</p><p class="muted">Killers: ${g.killers.join(', ')}</p>`;
+      if (g.killerMode === 'mastermind') html += `<p class="muted">Mastermind (${g.mastermind}) chooses target</p>`;
+      html += `<p>Select victim:</p><div class="kill-select-grid">`;
+      const alive = g.alive.filter(p => !g.killers.includes(p));
+      if (alive.length === 0) { html += `<p class="muted">No targets</p>`; }
+      alive.forEach(p => {
+        html += `<button class="btn btn-secondary kill-target" data-target="${p}">${p}</button>`;
+      });
+      html += `</div>`;
+    } else if (step === 1) {
+      html += `<p>Step 2: Doctor wakes</p>`;
+      const doctorAlive = g.doctor && g.alive.includes(g.doctor);
+      if (doctorAlive) {
+        html += `<p class="muted">Doctor: ${g.doctor} — select a player to save</p>`;
+        html += `<div class="kill-select-grid">`;
+        g.alive.forEach(p => {
+          html += `<button class="btn btn-secondary doctor-save" data-target="${p}">${p}</button>`;
+        });
+        html += `</div>`;
+      } else if (g.doctor) {
+        html += `<p class="muted">Doctor (${g.doctor}) is dead.</p>`;
+        html += `<button class="btn" id="nightDoctorSkip">⏩ Skip (doctor dead)</button>`;
+      } else {
+        html += `<p class="muted">No doctor in game.</p>`;
+        html += `<button class="btn" id="nightDoctorSkip">⏩ Skip</button>`;
+      }
+    } else if (step === 2) {
+      html += `<p>Step 3: Detective wakes</p>`;
+      const detectiveAlive = g.detective && g.alive.includes(g.detective);
+      if (detectiveAlive) {
+        html += `<p class="muted">Detective: ${g.detective} — guess a killer</p>`;
+        html += `<div class="kill-select-grid">`;
+        g.alive.forEach(p => {
+          html += `<button class="btn btn-secondary detective-guess" data-target="${p}">${p}</button>`;
+        });
+        html += `</div>`;
+      } else if (g.detective) {
+        html += `<p class="muted">Detective (${g.detective}) is dead.</p>`;
+        html += `<button class="btn" id="nightDetectiveSkip">⏩ Skip (detective dead)</button>`;
+      } else {
+        html += `<p class="muted">No detective in game.</p>`;
+        html += `<button class="btn" id="nightDetectiveSkip">⏩ Skip</button>`;
+      }
+    } else if (step === 3) {
+      html += `<p><strong>🌅 Dawn: Reveal</strong></p>`;
+      if (g.victim) {
+        const deathMsg = g.deathMessage || randomDeath();
+        html += `<div class="death-msg">💀 ${g.victim} died: ${deathMsg}</div>`;
+        if (g.saved === g.victim) {
+          html += `<p>💉 But the doctor saved them!</p>`;
+        }
+      } else {
+        html += `<p>No murder this night.</p>`;
+      }
+      if (g.detectiveGuess && g.killerCaught) {
+        html += `<p>🔎 Detective caught a killer: ${g.detectiveGuess}!</p>`;
+      }
+      html += `<button class="btn btn-success" id="revealBtn">☀️ Proceed to Trial</button>`;
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  function bindNightEvents(g) {
+    document.querySelectorAll('.kill-target').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const target = this.dataset.target;
+        g.victim = target;
+        g.deathMessage = randomDeath();
+        g.nightStep = 1;
+        render();
+      });
+    });
+    document.querySelectorAll('.doctor-save').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const target = this.dataset.target;
+        g.saved = target;
+        g.nightStep = 2;
+        render();
+      });
+    });
+    const docSkip = document.getElementById('nightDoctorSkip');
+    if (docSkip) docSkip.addEventListener('click', function() { 
+      g.saved = null; 
+      g.nightStep = 2; 
+      render(); 
+    });
+    document.querySelectorAll('.detective-guess').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const target = this.dataset.target;
+        g.detectiveGuess = target;
+        if (g.killers.includes(target)) {
+          g.killerCaught = true;
+          const idx = g.killers.indexOf(target);
+          if (idx !== -1) g.killers.splice(idx, 1);
+          const aliveIdx = g.alive.indexOf(target);
+          if (aliveIdx !== -1) g.alive.splice(aliveIdx, 1);
+        } else {
+          g.killerCaught = false;
+        }
+        g.nightStep = 3;
+        render();
+      });
+    });
+    const detSkip = document.getElementById('nightDetectiveSkip');
+    if (detSkip) detSkip.addEventListener('click', function() { 
+      g.detectiveGuess = null; 
+      g.killerCaught = false; 
+      g.nightStep = 3; 
+      render(); 
+    });
+
+    const revealBtn = document.getElementById('revealBtn');
+    if (revealBtn) {
+      revealBtn.addEventListener('click', function() {
+        // Apply murder
+        if (g.victim && g.saved !== g.victim) {
+          const idx = g.alive.indexOf(g.victim);
+          if (idx !== -1) g.alive.splice(idx, 1);
+        }
+        
+        // Check win conditions
+        const killersAlive = g.killers.filter(k => g.alive.includes(k));
+        const nonKillers = g.alive.filter(p => !g.killers.includes(p));
+        
+        // If no killers alive, civilians win
+        if (killersAlive.length === 0) {
+          g.gameOver = true;
+          g.winner = 'Civilians & detectives';
+          render();
+          return;
+        }
+        
+        // If only killers remain or 2 players left with a killer, killers win
+        if (nonKillers.length === 0 || (g.alive.length <= 2 && killersAlive.length > 0)) {
+          g.gameOver = true;
+          g.winner = 'Killers';
+          render();
+          return;
+        }
+        
+        // Proceed to trial
+        g.phase = 'trial';
+        g.trialPhase = 'active';
+        g.trialAccused = null;
+        g.executedThisCycle = false;
+        render();
+      });
+    }
+  }
+
+  // ----- TRIAL PHASE (host only selects guilty player) -----
+  function renderTrialPhase(g) {
+    let html = `<div class="cycle-step"><p><strong>⚖️ Trial Phase</strong></p>`;
+    html += `<div class="trial-msg">`;
+    html += `<p>Players discuss and accuse. When 2 players accuse the same person, that person goes on trial.</p>`;
+    html += `<p class="muted">The host facilitates discussion. After the trial vote, select the player found guilty.</p>`;
+    html += `</div>`;
+
+    if (g.trialPhase === 'active') {
+      html += `<p><strong>Select the player found guilty by the trial:</strong></p>`;
+      html += `<div class="kill-select-grid">`;
+      g.alive.forEach(p => {
+        html += `<button class="btn btn-danger trial-guilty" data-target="${p}">⚖️ ${p}</button>`;
+      });
+      html += `</div>`;
+      html += `<p class="muted">(The group must find someone guilty each round)</p>`;
+    } else if (g.trialPhase === 'done') {
+      html += `<p>⚖️ Trial complete.</p>`;
+      if (g.executedThisCycle) {
+        html += `<p>${g.trialAccused} was executed.</p>`;
+      }
+      html += `<button class="btn btn-success" id="trialProceedDay">☀️ Proceed to Day</button>`;
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  function bindTrialEvents(g) {
+    document.querySelectorAll('.trial-guilty').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const target = this.dataset.target;
+        g.trialAccused = target;
+        // execute
+        const idx = g.alive.indexOf(target);
+        if (idx !== -1) g.alive.splice(idx, 1);
+        const kIdx = g.killers.indexOf(target);
+        if (kIdx !== -1) g.killers.splice(kIdx, 1);
+        g.executedThisCycle = true;
+        g.trialPhase = 'done';
+        // check win
+        const killersAlive = g.killers.filter(k => g.alive.includes(k));
+        const nonKillers = g.alive.filter(p => !g.killers.includes(p));
+        if (killersAlive.length === 0) { 
+          g.gameOver = true; 
+          g.winner = 'Civilians & detectives'; 
+          render(); 
+          return; 
+        }
+        if (nonKillers.length === 0 || (g.alive.length <= 2 && killersAlive.length > 0)) { 
+          g.gameOver = true; 
+          g.winner = 'Killers'; 
+          render(); 
+          return; 
+        }
+        render();
+      });
+    });
+    const proceed = document.getElementById('trialProceedDay');
+    if (proceed) {
+      proceed.addEventListener('click', function() {
+        g.phase = 'day';
+        render();
+      });
+    }
+  }
+
+  // ----- DAY PHASE -----
+  function renderDayPhase(g) {
+    let html = `<div class="cycle-step"><p><strong>☀️ Day ${g.cycle+1}</strong></p>`;
+    if (g.victim && g.saved !== g.victim) {
+      html += `<div class="death-msg">💀 ${g.victim} was killed: ${g.deathMessage || randomDeath()}</div>`;
+    } else if (g.victim && g.saved === g.victim) {
+      html += `<p>💉 ${g.victim} was attacked but saved!</p>`;
+    } else {
+      html += `<p>No murder last night.</p>`;
+    }
+    if (g.detectiveGuess && g.killerCaught) {
+      html += `<p>🔎 Detective caught a killer: ${g.detectiveGuess}.</p>`;
+    }
+    if (g.executedThisCycle) {
+      html += `<p>⚖️ ${g.trialAccused} was executed by trial.</p>`;
+    }
+
+    const killersAlive = g.killers.filter(k => g.alive.includes(k));
+    const nonKillers = g.alive.filter(p => !g.killers.includes(p));
+    if (killersAlive.length === 0) { 
+      g.gameOver = true; 
+      g.winner = 'Civilians & detectives'; 
+      render(); 
+      return ''; 
+    }
+    if (nonKillers.length === 0 || (g.alive.length <= 2 && killersAlive.length > 0)) { 
+      g.gameOver = true; 
+      g.winner = 'Killers'; 
+      render(); 
+      return ''; 
+    }
+
+    html += `<button class="btn btn-success btn-block" id="nextNightBtn">🌙 Next Night</button>`;
+    html += `</div>`;
+    return html;
+  }
+
+  function bindDayEvents(g) {
+    const next = document.getElementById('nextNightBtn');
+    if (next) {
+      next.addEventListener('click', function() {
+        g.phase = 'night';
+        g.nightStep = 0;
+        g.victim = null;
+        g.saved = null;
+        g.detectiveGuess = null;
+        g.killerCaught = false;
+        g.deathMessage = '';
+        g.executedThisCycle = false;
+        g.trialAccused = null;
+        g.trialPhase = 'idle';
+        g.cycle++;
+        render();
+      });
+    }
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
