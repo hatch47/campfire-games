@@ -366,8 +366,8 @@
 
   <!-- mode toggle -->
   <div class="mode-toggle">
-    <button id="funModeBtn" class="mode-btn active">🎉 Fun</button>
-    <button id="compModeBtn" class="mode-btn">⚔️ Competitive</button>
+    <button id="funModeBtn" class="mode-btn active">Fun</button>
+    <button id="compModeBtn" class="mode-btn">Competitive</button>
   </div>
 
   <!-- PLAYER PANEL (always visible) -->
@@ -382,7 +382,7 @@
   <!-- CONFIGURATION: Round selector always visible -->
   <div class="panel" id="configPanel2">
     <div class="config-row">
-      <span class="config-label">📊 Questions:</span>
+      <span class="config-label">Questions:</span>
       <div class="round-selector" id="roundSelector">
         <button data-round="10" class="active">10</button>
         <button data-round="25">25</button>
@@ -416,7 +416,7 @@
   <!-- COMPETITIVE MODE UI -->
   <div id="compModePanel" class="hidden">
     <div class="competitive-controls">
-      <button class="action-btn" id="compNewQuestionBtn" style="flex:0 1 auto; padding: 6px 18px;">Next Q</button>
+      <button class="action-btn" id="compNewQuestionBtn" style="flex:0 1 auto; padding: 6px 18px;">Next Question</button>
     </div>
 
     <div style="text-align: center;">
@@ -797,10 +797,10 @@
       if (roundLimit !== 0 && currentRound >= roundLimit) {
         gameOver = true;
         compGameOver.classList.remove('hidden');
-        compGameOver.textContent = `🏁 Game Over! ${roundLimit} questions completed.`;
-        compNewQuestionBtn.textContent = '🔄 New Game';
+        compGameOver.textContent = `Game Over! ${roundLimit} questions completed.`;
+        compNewQuestionBtn.textContent = 'New Game';
         updateQuestionCounter();
-        scoringStatus.textContent = '⏹️ Game over!';
+        scoringStatus.textContent = 'Game over!';
         return;
       }
 
@@ -827,7 +827,7 @@
       currentRound = 0;
       gameOver = false;
       compGameOver.classList.add('hidden');
-      compNewQuestionBtn.textContent = 'Next Q';
+      compNewQuestionBtn.textContent = 'Next Question';
       players.forEach(name => { 
         scores[name] = 0;
         scoredThisQuestion[name] = false;
@@ -844,10 +844,10 @@
       if (currentMode === 'competitive' && gameStarted && roundLimit !== 0 && currentRound >= roundLimit) {
         gameOver = true;
         compGameOver.classList.remove('hidden');
-        compGameOver.textContent = `🏁 Game Over! ${roundLimit} questions completed.`;
-        compNewQuestionBtn.textContent = '🔄 New Game';
+        compGameOver.textContent = `Game Over! ${roundLimit} questions completed.`;
+        compNewQuestionBtn.textContent = 'New Game';
         updateQuestionCounter();
-        scoringStatus.textContent = '⏹️ Game over!';
+        scoringStatus.textContent = 'Game over!';
       }
     }
 
@@ -876,7 +876,7 @@
       updateScoreDisplay();
       updateQuestionCounter();
       compGameOver.classList.add('hidden');
-      compNewQuestionBtn.textContent = 'Next Q';
+      compNewQuestionBtn.textContent = 'Next Question';
       funExplanation.classList.add('hidden');
       compExplanation.classList.add('hidden');
       scoringStatus.textContent = '';
@@ -927,7 +927,7 @@
         updateScoreDisplay();
         updateQuestionCounter();
         compGameOver.classList.add('hidden');
-        compNewQuestionBtn.textContent = 'Next Q';
+        compNewQuestionBtn.textContent = 'Next Question';
         compNewQuestion(); // This will increment to round 1
       }
     }
@@ -974,7 +974,7 @@
         updateScoreDisplay();
         updateQuestionCounter();
         compGameOver.classList.add('hidden');
-        compNewQuestionBtn.textContent = 'Next Q';
+        compNewQuestionBtn.textContent = 'Next Question';
         scoringStatus.textContent = '🔒 Reveal the lie to enable scoring';
         // Show config panels
         configPanel.classList.remove('hidden');
@@ -999,7 +999,7 @@
       });
       updateScoreDisplay();
       compGameOver.classList.add('hidden');
-      compNewQuestionBtn.textContent = 'Next Q';
+      compNewQuestionBtn.textContent = 'Next Question';
       funExplanation.classList.add('hidden');
       compExplanation.classList.add('hidden');
       updateQuestionCounter();
