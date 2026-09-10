@@ -888,6 +888,7 @@
     ];
 
     const LIES = [
+      // https://www.signupgenius.com/resources/true-or-false-questions
       { lie: "The human body has 206 muscles.", explanation: "Actually, the human body has over 600 muscles; 206 is the number of bones." },
       { lie: "Bats are blind.", explanation: "Bats are not blind; many use echolocation but have functional eyes." },
       { lie: "Sharks don't get cancer.", explanation: "Sharks do get cancer, though it's rare; they are not immune." },
@@ -912,7 +913,42 @@
       { lie: "The fastest animal is the cheetah.", explanation: "The peregrine falcon is fastest (diving), cheetah is fastest on land." },
       { lie: "The color of the sky is blue because of reflection from the ocean.", explanation: "The sky is blue due to Rayleigh scattering of sunlight by the atmosphere." },
       { lie: "The human heart is on the left side.", explanation: "The heart is centrally located, slightly tilted left." },
-      { lie: "A diamond is formed from coal.", explanation: "Most diamonds are formed far deeper than coal deposits, though both are carbon." }
+      { lie: "A diamond is formed from coal.", explanation: "Most diamonds are formed far deeper than coal deposits, though both are carbon." },
+      { lie: "A group of flamingos is called a flock.", explanation: "A group of flamingos is called a flamboyance." },
+      { lie: "Elephants are the only animals that cannot jump.", explanation: "Elephants, hippos, rhinos, and sloths are all physically unable to jump; elephants are just the most famous example." },
+      { lie: "Penguins mate for life.", explanation: "Most penguin species are serially monogamous—faithful within a breeding season but not always to the same partner across years." },
+      { lie: "Lightning never strikes the same place twice.", explanation: "Lightning frequently strikes the same place multiple times; the Empire State Building is struck about 20 times per year." },
+      { lie: "Sound travels faster than light.", explanation: "Light travels at about 186,000 miles per second, while sound travels at roughly 767 miles per hour." },
+      { lie: "Water always boils at 212°F (100°C).", explanation: "Water boils at lower temperatures at higher altitudes because atmospheric pressure decreases; in Denver it boils at about 202°F." },
+      { lie: "DNA stands for Deoxyribose Nucleic Acid.", explanation: "DNA stands for Deoxyribonucleic Acid." },
+      { lie: "All planets in our solar system rotate in the same direction.", explanation: "Venus and Uranus rotate in the opposite direction from most other planets." },
+      { lie: "Humans are the only animals with fingerprints.", explanation: "Koalas also have fingerprints, and they are so similar to human fingerprints that they have occasionally confused crime scene investigators." },
+      { lie: "The tongue is the strongest muscle in the human body.", explanation: "The tongue is strong, but the masseter (jaw muscle) is generally considered the strongest muscle relative to its size." },
+      { lie: "Humans are born with all the neurons they will ever have.", explanation: "The brain continues to produce new neurons throughout life, particularly in the hippocampus." },
+      { lie: "Blood is blue inside the body.", explanation: "Human blood is always red; deoxygenated blood appears darker red, and veins look blue due to how light passes through tissue." },
+      { lie: "The Sahara is the largest desert in the world.", explanation: "Antarctica is the largest desert; a desert is defined by low precipitation, not temperature. The Sahara is the largest hot desert." },
+      { lie: "The Amazon River flows into the Pacific Ocean.", explanation: "The Amazon River flows into the Atlantic Ocean on the northeastern coast of Brazil." },
+      { lie: "The Great Wall of China is visible from space with the naked eye.", explanation: "The wall is long but not wide enough to be seen from space without aid, according to multiple astronauts." },
+      { lie: "Iceland is covered in ice and Greenland is covered in green.", explanation: "Iceland has a relatively mild climate with large areas of vegetation, while Greenland is about 80% covered by an ice sheet." },
+      { lie: "Almonds are a type of nut.", explanation: "Almonds are technically seeds—the edible pit of a drupe fruit, more closely related to peaches than to walnuts." },
+      { lie: "Coffee is made from beans.", explanation: "Coffee is made from the roasted seeds of a coffee plant's fruit, commonly called coffee cherries; they are seeds, not true beans." },
+      { lie: "White chocolate is a type of chocolate.", explanation: "White chocolate contains cocoa butter, sugar, and milk but no cocoa solids, which many purists consider necessary for true chocolate." },
+      { lie: "The most expensive spice in the world by weight is vanilla.", explanation: "Saffron is the most expensive spice; it takes around 75,000 crocus flowers to produce one pound of saffron." },
+      { lie: "The Olympic Games were originally held every two years.", explanation: "The ancient Olympic Games were held every four years; that interval, called an Olympiad, was also used as a unit of time in ancient Greece." },
+      { lie: "The Tour de France is always won by a French cyclist.", explanation: "French cyclists have rarely won in recent decades; riders from Spain, the United States, and Great Britain have dominated many modern races." },
+      { lie: "In baseball, a perfect game means a pitcher strikes out every batter.", explanation: "A perfect game means every batter is retired without reaching base; outs can occur through strikeouts, groundouts, or flyouts." },
+      { lie: "Napoleon Bonaparte was unusually short for his time.", explanation: "Napoleon was about 5 feet 6–7 inches tall, average or slightly above average for a French man in the late 1700s; the myth came from British propaganda and measurement confusion." },
+      { lie: "Albert Einstein failed mathematics as a student.", explanation: "Einstein excelled in mathematics from a young age and had mastered calculus by the time he was a teenager." },
+      { lie: "The Titanic had enough lifeboats for everyone on board.", explanation: "The Titanic carried lifeboats with space for about 1,178 people, but more than 2,200 people were on board." },
+      { lie: "The Eiffel Tower was originally intended to be permanent.", explanation: "The tower was built for the 1889 World's Fair and was meant to be dismantled after 20 years, but it was preserved because it proved useful for radio transmissions." },
+      { lie: "The word \"Easter\" has definite Christian origins.", explanation: "The origin of the English word \"Easter\" is debated; one theory connects it to Eostre, a Germanic spring deity, though historians disagree on the exact origin." },
+      { lie: "St. Valentine's Day has always been associated with romantic love.", explanation: "The holiday began as a religious feast day; its connection to romantic love grew during the Middle Ages, especially through literature like Geoffrey Chaucer's poetry." },
+      { lie: "In the United States, Thanksgiving is held on the last Thursday of November.", explanation: "Thanksgiving is celebrated on the fourth Thursday of November, which is not always the last Thursday of the month." },
+      { lie: "The New Year is celebrated on January 1 in every country.", explanation: "Many cultures celebrate the new year on different dates, including Lunar New Year, Nowruz, and Rosh Hashanah." },
+      { lie: "The candy cane shape has a specific symbolic origin.", explanation: "Stories about the candy cane representing a shepherd's crook or the letter J are popular but unsupported by historical evidence; the shape was likely created so the candy could hang on Christmas trees." },
+      { lie: "\"Q\" is the only letter that does not appear in any U.S. state name.", explanation: "Several letters do not appear in state names, including B, J, Q, X, and Z." },
+      { lie: "Fortune cookies were invented in China.", explanation: "Fortune cookies were invented in the United States, most likely in California in the early 20th century." },
+      { lie: "A day on Earth is exactly 24 hours long.", explanation: "A full Earth rotation is about 23 hours, 56 minutes, and 4 seconds; the 24-hour day is a rounded solar time used for everyday timekeeping." }
     ];
 
     // ---------- GAME STATE ----------
