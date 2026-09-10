@@ -404,12 +404,12 @@
       <div class="truth-lie-item"><strong>3.</strong> <span id="funLie">—</span></div>
     </div>
     <div class="action-row">
-      <button class="action-btn" id="funNewBtn">✨ New</button>
-      <button class="action-btn reveal" id="funRevealBtn">🔍 Reveal lie</button>
+      <button class="action-btn" id="funNewBtn">New</button>
+      <button class="action-btn reveal" id="funRevealBtn">Reveal lie</button>
     </div>
     <div id="funExplanation" class="explanation-box hidden"></div>
     <div class="quit-area">
-      <button class="quit-btn" id="funQuitBtn">✖ Quit Game</button>
+      <button class="quit-btn" id="funQuitBtn">Quit Game</button>
     </div>
   </div>
 
@@ -444,7 +444,7 @@
     <div id="scoreDisplay" class="score-area"></div>
     <div id="compGameOver" class="win-message hidden"></div>
     <div class="quit-area">
-      <button class="quit-btn" id="compQuitBtn">✖ Quit Game</button>
+      <button class="quit-btn" id="compQuitBtn">Quit Game</button>
     </div>
   </div>
 
@@ -454,58 +454,6 @@
 <script>
   (function() {
     // ---------- TRUTH & LIE DATASETS (easy to extend) ----------
-    // const TRUTHS = [
-    //   "Bananas are berries, but strawberries aren't.",
-    //   "A group of flamingos is called a 'flamboyance'.",
-    //   "The Eiffel Tower can be 15 cm taller in summer.",
-    //   "Octopuses have three hearts.",
-    //   "Honey never spoils; edible for thousands of years.",
-    //   "A day on Venus is longer than a year on Venus.",
-    //   "The inventor of the microwave oven received only $2 for his patent.",
-    //   "Cows have best friends and get stressed when separated.",
-    //   "The human nose can detect over 1 trillion scents.",
-    //   "Sharks have been around longer than trees.",
-    //   "The moon has moonquakes.",
-    //   "Butterflies taste with their feet.",
-    //   "A jiffy is an actual unit of time (1/100th of a second).",
-    //   "The shortest war in history lasted 38 minutes.",
-    //   "Kangaroos can't walk backward.",
-    //   "An ostrich's eye is bigger than its brain.",
-    //   "The unicorn is the national animal of Scotland.",
-    //   "A 'jiffy' is a real time unit.",
-    //   "The Great Wall of China is not visible from space with the naked eye.",
-    //   "Polar bear skin is actually black.",
-    //   "Bubble gum pink is a real color.",
-    //   "There are more stars in the universe than grains of sand on Earth.",
-    //   "A bolt of lightning is 5 times hotter than the sun's surface.",
-    //   "The world's oldest known recipe is for beer.",
-    //   "The word 'bed' looks like a bed.",
-    //   "The average person spends 6 months of their life waiting for red lights.",
-    //   "The first oranges weren't orange; they were green.",
-    //   "A crocodile can't stick out its tongue.",
-    //   "The only letter not on the periodic table is J.",
-    //   "Your stomach acid can dissolve razor blades.",
-    //   "A 'leap year' happens every 4 years (with exceptions).",
-    //   "The dot over 'i' is called a tittle.",
-    //   "The longest word in English has 189,819 letters (titin).",
-    //   "A group of owls is a 'parliament'.",
-    //   "The first product to have a barcode was Wrigley's gum.",
-    //   "There are 206 bones in the adult human body.",
-    //   "The Amazon River once flowed the other way.",
-    //   "The color of a person's hair can change with age.",
-    //   "The largest snowflake ever recorded was 15 inches wide.",
-    //   "Turtles can breathe through their butts.",
-    //   "The speed of a sneeze can be over 100 mph.",
-    //   "Cats have fewer toes on their back paws.",
-    //   "The left lung is smaller than the right lung.",
-    //   "The average cloud weighs about 1.1 million pounds.",
-    //   "An octopus has nine brains.",
-    //   "The only mammal that can truly fly is the bat.",
-    //   "The smell of freshly-cut grass is a plant distress signal.",
-    //   "A 'computer bug' was named after a real moth.",
-    //   "The longest recorded flight of a chicken is 13 seconds.",
-    //   "The sun makes up 99.86% of the mass in our solar system."
-    // ];
     const TRUTHS = [
       // https://www.sciencefocus.com/science/fun-facts
       "Parents in the US consistently rank as the world's unhappiest.",
@@ -655,7 +603,7 @@
       "It's impossible to swallow your own tongue.",
       "Some insects can live for decades.",
       "The deepest part of the ocean reaches more than 10,900m.",
-      
+    
       // https://www.dreambox.com/math/guides/fun-facts-for-kids
       "A day on Venus is longer than a whole year there!",
       "Venus is the hottest planet in our solar system.",
@@ -698,7 +646,7 @@
       "Dolphins have names for each other.",
       "Shrimp have their hearts in their heads.",
       "Platypuses don't have stomachs like most animals.",
-      "Flamingos in a group are called a "flamboyance."",
+      "Flamingos in a group are called a 'flamboyance'.",
       "Some frogs can freeze solid and come back to life.",
       "Sharks lived on Earth before trees existed!",
       "Elephants can't jump.",
@@ -709,10 +657,10 @@
       "Cockroaches can live for days without their heads.",
       "Seahorse dads carry their babies.",
       "Kangaroos can't walk backward.",
-      "A group of zebras is called a "dazzle."",
-      "A group of hippos is called a "bloat."",
-      "A group of owls is called a "parliament."",
-      "Penguins can't fly in the air, but they "fly" underwater.",
+      "A group of zebras is called a 'dazzle'.",
+      "A group of hippos is called a 'bloat'.",
+      "A group of owls is called a 'parliament'.",
+      "Penguins can't fly in the air, but they 'fly' underwater.",
       "Giraffes have black tongues to protect them from the sun.",
       "Bees can see colors that we can't, like ultraviolet!",
       "Crows can remember human faces.",
@@ -723,7 +671,7 @@
       "Octopuses have three hearts and blue blood.",
       "Some snails can sleep for three years.",
       "Cats spend 70% of their lives sleeping.",
-      "A group of jellyfish is called a "smack."",
+      "A group of jellyfish is called a 'smack'.",
       "Your body is about 60% water.",
       "Your heart beats about 100,000 times a day.",
       "You lose 50 to 100 hairs every day.",
@@ -757,23 +705,23 @@
       "Strawberries have their seeds on the outside.",
       "Bananas are slightly radioactive (but safe to eat).",
       "Chocolate-covered ants are eaten in some countries.",
-
+    
       // https://www.cosmopolitan.com/lifestyle/a64055094/fun-facts-random/
       "Earth's rotation is changing speed. It's actually slowing, and this means that, on average, the length of a day increases by around 1.8 seconds per century.",
       "Ironically, the fear of long words is called Hippopotomonstrosesquippedaliophobia. The 36-letter word was first used in the first century BCE to criticize writers with an unreasonable penchant for long words.",
       "Chainsaws were first invented for childbirth. They were developed in Scotland in the late 18th Century to help aid and speed up the process of symphysiotomy (widening the pubic cartilage), and the removal of disease-laden bone during childbirth.",
       "Avocados are a fruit, not a vegetable. They're technically considered a single-seeded berry, believe it or not.",
       "The Eiffel Tower can be 15 cm taller during the summer. That's due to thermal expansion, meaning the iron heats up, and the particles gain kinetic energy and take up more space.",
-      "Trypophobia is the fear of closely-packed holes. Or, more specifically, "an aversion to the sight of irregular patterns or clusters of small holes or bumps." No English muffins for them, then!",
+      "Trypophobia is the fear of closely-packed holes. Or, more specifically, 'an aversion to the sight of irregular patterns or clusters of small holes or bumps.' No English muffins for them, then!",
       "Allodoxaphobia is the fear of other people's opinions. It's a rare social phobia characterized by an irrational and overwhelming fear of what other people think.",
       "Australia is wider than the moon. The moon is 3400 km in diameter, while Australia's diameter from east to west is almost 4000 km.",
       "'Mellifluous' is a sound that is pleasingly smooth and musical to hear.",
-      "The Spice Girls were originally a band called Touch. "When we first started [with the name Touch], we were pretty bland," Mel C told The Guardian in 2018. "We felt like we had to fit into a mold."",
+      "The Spice Girls were originally a band called Touch. 'When we first started [with the name Touch], we were pretty bland,' Mel C told The Guardian in 2018. 'We felt like we had to fit into a mold.'",
       "Human teeth are the only part of the body that cannot heal themselves. That's because teeth are coated in enamel, which is not a living tissue.",
       "It's illegal to own just one guinea pig in Switzerland. It's considered animal abuse because they're social beings and get lonely.",
-      "The Ancient Romans used to drop a piece of toast into their wine for good health. Hence why we "raise a toast."",
+      "The Ancient Romans used to drop a piece of toast into their wine for good health. Hence why we 'raise a toast.'",
       "The heart of a shrimp is located in its head. They also have an open circulatory system, which means they have no arteries and their organs float directly in the blood.",
-      "Amy Poehler was only seven years older than Rachel McAdams when she took on the role of "cool mom" in Mean Girls. Rachel was 25, playing Regina George, and Amy was 32.",
+      "Amy Poehler was only seven years older than Rachel McAdams when she took on the role of 'cool mom' in Mean Girls. Rachel was 25, playing Regina George, and Amy was 32.",
       "People are more creative in the shower. When we take a warm shower, we experience an increased dopamine flow that makes us more creative.",
       "Baby rabbits are called kits. Cute!",
       "The unicorn is the national animal of Scotland. It was apparently chosen because of its connection with dominance and chivalry, as well as purity and innocence in Celtic mythology.",
@@ -784,12 +732,12 @@
       "Competitive art used to be an Olympic sport. Between 1912 and 1948, the international sporting event awarded medals for music, painting, sculpture, and architecture.",
       "A chef's hat has 100 pleats. Apparently, it's meant to represent the 100 ways you can cook an egg. Wonder if Gordon Ramsay knows that.",
       "In 2014, there was a Tinder match in Antarctica. Two research scientists matched on the global dating app in the most remote part of the world. The man was working at the United States Antarctic McMurdo Station, and the woman was camping a 45-minute helicopter ride away.",
-      "The Spanish national anthem has no words. The "Marcha Real" is one of only four national anthems in the world (along with those of Bosnia and Herzegovina, Kosovo, and San Marino) to have no official lyrics.",
+      "The Spanish national anthem has no words. The 'Marcha Real' is one of only four national anthems in the world (along with those of Bosnia and Herzegovina, Kosovo, and San Marino) to have no official lyrics.",
       "The Japanese word 'Kuchi zamishi' is the act of eating when you're not hungry because your mouth is lonely. We do this all the time.",
       "The probability of a blue lobster existing is widely touted as being one in two million. Bright blue lobsters get their color because of a genetic abnormality that causes them to produce more of a certain protein than others.",
       "There's only one letter that doesn't appear in any American state name. There's a Z in Arizona, and an X in Texas, but no Q in any of them.",
       "Louboutin's iconic red soles were inspired by Andy Warhol. The 60s pop artist's drawing Flowers caught the eye of the famous designer, which gave him the idea to add the infamous sole to his designs.",
-      "A book called "A La Recherche du Temps Perdu" by Marcel Proust contains an estimated 9,609,000 characters, making it the longest book in the world. The title translates to "Remembrance of Things Past."",
+      "A book called 'A La Recherche du Temps Perdu' by Marcel Proust contains an estimated 9,609,000 characters, making it the longest book in the world. The title translates to 'Remembrance of Things Past.'",
       "Google Images was created after Jennifer Lopez wore *that* infamous dress at the 2000 Grammys. So many people were searching for her outfit, the search engine added an image function.",
       "Big Ben's clock stopped at 10:07 p.m. on 27 May 2005, most likely due to extremely hot temperatures.",
       "Walt Disney currently holds the most Academy Awards. Disney won 26 Oscars over the course of his career and was nominated 59 times.",
@@ -828,7 +776,7 @@
       "The Night's Watch cloaks in Game of Thrones were made from Ikea rugs. The show bought the rugs, shaved them down, and then dyed them to make the cloaks.",
       "The iCarly high school set was also used for Saved by the Bell and That's So Raven. That's why it looks so familiar!",
       "Harry Styles has four nipples. He has a common condition called polythelia.",
-      "People used to say "prunes" instead of "cheese" when getting their pictures taken. In the 1840s, a cheesy grin was seen as childish, so a London photographer told people to say "prunes" to keep their mouths tight.",
+      "People used to say 'prunes' instead of 'cheese' when getting their pictures taken. In the 1840s, a cheesy grin was seen as childish, so a London photographer told people to say 'prunes' to keep their mouths tight.",
       "Blue whale tongues can weigh as much as an elephant. Their hearts also only need to beat once every ten seconds.",
       "Queen Elizabeth II had a stand-in to make sure the sun wouldn't get in her eyes. Ella Slack was a similar height to the late Queen, so she would rehearse big events beforehand to make sure everything would be comfortable for the monarch. However, she wasn't allowed to sit on the throne, so she had to squat above it.",
       "There's an ant species unique to New York City. Called ManhattAnts, biologists found them in a specific 14-block strip of the city.",
@@ -836,25 +784,25 @@
       "There's only one Shell garage actually shaped like a Shell. There was actually eight built in the 1930s, but only one remains, in North Carolina.",
       "The shortest commercial flight in the world takes place in Scotland. Regional airline Loganair flies between the islands of Westray and Papa Westray. The journey is just 1.7 miles and takes 90 seconds.",
       "Dolphins have names for one another. According to National Geographic, dolphins use a unique whistle to distinguish between different members in their pod.",
-      "The blob of toothpaste on a toothbrush has a name. It's called a "nurdle" and there was once a lawsuit over which toothpaste company had the right to portray it.",
+      "The blob of toothpaste on a toothbrush has a name. It's called a 'nurdle' and there was once a lawsuit over which toothpaste company had the right to portray it.",
       "One part of Istanbul is in Europe, and the other is in Asia. Part of it neighbors Greece and Bulgaria (therefore sitting in Europe), and the other part neighbors Syria, Iran, and Iraq, beyond Turkey's borders (therefore classed as Asia). The Bosphorus Strait runs between them—a narrow body of water that connects the Black Sea to the Mediterranean Sea via the Sea of Marmara.",
       "There are more than 1,000 types of bananas growing in the world. These can then be divided into 50 categories.",
       "The letter 'E' is the most popular letter in the alphabet. 'Z' is the least popular.",
       "Hazelnuts are the official state nut of Oregon. Because yes, that's a thing.",
-      "The Beatles' song "A Day in the Life" has a frequency only dogs can hear. It's at the end of the song.",
+      "The Beatles' song 'A Day in the Life' has a frequency only dogs can hear. It's at the end of the song.",
       "Vietnam is the world's second biggest coffee producer. Brazil creates the most, with Colombia coming in third.",
       "The TV show Big Brother originated in the Netherlands. It was created by John de Mol in 1999, and has since been franchised in 54 countries.",
       "Candles were once eaten in famines. They used to be mainly created from beef fat or beeswax, and so they were often stolen in famines.",
       "KFC is the meal of choice on Christmas Day in Japan. This happened following a successful marketing campaign over 40 years ago.",
       "The bamboo plant is the fastest-growing woody plant in the world. It can grow up to 35 inches per day.",
       "The office chair is believed to have been invented by Charles Darwin. The scientist had the idea to attach wheels to his chair so he could move around between his many tables.",
-      "Mariah Carey holds the record for the most number-one singles by a solo artist on the Billboard Hot 100 chart. She surpassed Elvis Presley and Michael Jackson with singles including "Fantasy" and "Always Be My Baby."",
+      "Mariah Carey holds the record for the most number-one singles by a solo artist on the Billboard Hot 100 chart. She surpassed Elvis Presley and Michael Jackson with singles including 'Fantasy' and 'Always Be My Baby.'",
       "Only 10% of the population is left-handed. And men are more likely to be left-handed.",
       "A cat spends on average 15 hours a day sleeping (jealous). This means the majority of its life is spent asleep.",
       "You share your birthday with around 19 million people. Yep, not feeling so special now, are you?",
       "There are about 5,000 species of sea sponges. Really!",
       "Beyoncé is the most awarded artist at the Grammys. She's been nominated for 99 awards and won a whopping 35.",
-      "The word "cereal" comes from a Roman goddess. The breakfast food is named after the goddess of harvest and agriculture, Ceres.",
+      "The word 'cereal' comes from a Roman goddess. The breakfast food is named after the goddess of harvest and agriculture, Ceres.",
       "The tiny pocket in your jeans was designed to hold pocket watches. It was needed for cowboys in the 1800s, although now it's mainly a decorative feature.",
       "The Pope can't be an organ donor. All popes' bodies belong to the Vatican when they die, which means no organ donation is allowed.",
       "Lemons float, but limes sink. This is because of their different densities, often causing unpeeled limes to sink if submerged in a liquid.",
@@ -875,9 +823,9 @@
       "A plant or animal cell that has a membrane and a nucleus is called a eukaryote. All animals, plants, and fungi fall into this category.",
       "The Caesar salad recently turned 100 years old. It was invented in July 1924 by Caesar Cardini, an Italian chef who owned a restaurant in Tijuana, Mexico.",
       "The hottest temperature ever recorded on Earth was 134 F. The recording was taken in Death Valley, Nevada, in July 1913.",
-      "The "Baby Shark Dance" is one of the most-watched videos on YouTube, with over 14.66 billion views.",
+      "The 'Baby Shark Dance' is one of the most-watched videos on YouTube, with over 14.66 billion views.",
       "Prince William and Prince Harry have a half-sister named Laura, who largely stays out of the public eye. She was born in 1978, and her parents are Queen Camilla and her then-husband, Andrew Parker Bowles.",
-      "Billie Eilish's "No Time to Die" is the most awarded song in history. It won 36 awards, including the Grammy Award for Best Song Written for Visual Media, the Golden Globe Award for Best Original Song, the Critics' Choice Movie Award for Best Song, and the Academy Award for Best Original Song.",
+      "Billie Eilish's 'No Time to Die' is the most awarded song in history. It won 36 awards, including the Grammy Award for Best Song Written for Visual Media, the Golden Globe Award for Best Original Song, the Critics' Choice Movie Award for Best Song, and the Academy Award for Best Original Song.",
       "Pantone named Mocha Mousse their Color of the Year for 2025.",
       "Your tongue is covered with roughly 8,000 taste buds, each containing up to 100 cells, which are what help you to taste food.",
       "The oldest verified man to ever live is Jiroemon Kimura (1897–2013) of Japan. He lived to the age of 116 years and 54 days.",
@@ -909,9 +857,9 @@
       "According to data from 2023, it's thought that Muhammed is the most popular name in the world. Maria is the second most popular name.",
       "Leap years happen every four years. They occur when the calendar contains an extra day—February 29th. The next leap year will take place in 2028.",
       "A dog that is a cross between a Chihuahua and a miniature dachshund is called a chiweenie.",
-      "If you Google the word "askew," the entire page will tilt. Warning: it might make you feel sick.",
+      "If you Google the word 'askew,' the entire page will tilt. Warning: it might make you feel sick.",
       "Snow White was the first Disney Princess to have a full-length movie. It was created way back in 1938.",
-      "The name LEGO comes from the Danish words "Leg Godt," which means "play well."",
+      "The name LEGO comes from the Danish words 'Leg Godt,' which means 'play well.'",
       "A group of frogs is called an army.",
       "The number four (4) is the only number with the same number of letters as its value. All of the others have more or fewer letters than their meaning.",
       "It's very difficult to sneeze with your eyes open.",
@@ -932,7 +880,7 @@
       "Potatoes were the first food to be grown in space.",
       "In your lifetime, you can walk enough to circle the globe three times.",
       "Rats have the ability to laugh. They do so when tickled.",
-      "Penguins "propose" by using pebbles.",
+      "Penguins 'propose' by using pebbles.",
       "The shortest day of the year generally happens in the UK on the 21st December, but it can change because the Earth's orbit around the sun takes 365.256 days, while our calendar years are 365 or 366 days.",
       "Donald Duck has appeared in the most Disney movies from 1934 to 1999 - all 197 of them! Which is more than Mickey Mouse, who has appeared in 167.",
       "The most pancakes flipped in a minute is 140! Something to try and challenge the next Pancake Day.",
