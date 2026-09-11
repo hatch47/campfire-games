@@ -477,7 +477,7 @@
   <!-- COMPETITIVE MODE UI -->
   <div id="compModePanel" class="hidden">
     <div class="competitive-controls">
-      <button class="action-btn" id="compNewQuestionBtn" style="flex:0 1 auto; padding: 6px 18px;">Next Q</button>
+      <button class="action-btn" id="compNewQuestionBtn" style="flex:0 1 auto; padding: 6px 18px;">Next Question</button>
     </div>
 
     <div style="text-align: center;">
@@ -883,7 +883,7 @@
       currentRound = 0;
       gameOver = false;
       compGameOver.classList.add('hidden');
-      compNewQuestionBtn.textContent = 'Next Q';
+      compNewQuestionBtn.textContent = 'Next Question';
       players.forEach(name => { 
         scores[name] = 0;
         scoredThisQuestion[name] = false;
@@ -918,7 +918,7 @@
       updateScoreDisplay();
       updateQuestionCounter();
       compGameOver.classList.add('hidden');
-      compNewQuestionBtn.textContent = 'Next Q';
+      compNewQuestionBtn.textContent = 'Next Question';
       document.querySelectorAll('#roundSelector button').forEach(btn => {
         btn.disabled = false;
       });
@@ -968,7 +968,7 @@
         updateScoreDisplay();
         updateQuestionCounter();
         compGameOver.classList.add('hidden');
-        compNewQuestionBtn.textContent = 'Next Q';
+        compNewQuestionBtn.textContent = 'Next Question';
         compNewQuestion();
       }
     }
@@ -1012,7 +1012,7 @@
         updateScoreDisplay();
         updateQuestionCounter();
         compGameOver.classList.add('hidden');
-        compNewQuestionBtn.textContent = 'Next Q';
+        compNewQuestionBtn.textContent = 'Next Question';
         scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
         configPanel.classList.remove('hidden');
         configPanel2.classList.remove('hidden');
@@ -1035,7 +1035,7 @@
       });
       updateScoreDisplay();
       compGameOver.classList.add('hidden');
-      compNewQuestionBtn.textContent = 'Next Q';
+      compNewQuestionBtn.textContent = 'Next Question';
       updateQuestionCounter();
       scoringStatus.textContent = '';
       configPanel.classList.remove('hidden');
