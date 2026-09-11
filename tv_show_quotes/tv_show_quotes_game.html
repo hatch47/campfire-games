@@ -466,11 +466,11 @@
       </div>
     </div>
     <div class="action-row">
-      <button class="action-btn" id="funNewBtn">✨ New</button>
-      <button class="action-btn reveal" id="funRevealBtn">🔍 Reveal Answer</button>
+      <button class="action-btn" id="funNewBtn">New</button>
+      <button class="action-btn reveal" id="funRevealBtn">Reveal Answer</button>
     </div>
     <div class="quit-area">
-      <button class="quit-btn" id="funQuitBtn">✖ Quit Game</button>
+      <button class="quit-btn" id="funQuitBtn">Quit Game</button>
     </div>
   </div>
 
@@ -495,12 +495,12 @@
     </div>
 
     <div class="action-row">
-      <button class="action-btn reveal" id="compRevealBtn">🔍 Reveal Answer</button>
+      <button class="action-btn reveal" id="compRevealBtn">Reveal Answer</button>
     </div>
 
     <!-- scoring: mark who was correct -->
     <div style="margin: 16px 0 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;">
-      <span style="font-weight: 500;">✅ Who got it right?</span>
+      <span style="font-weight: 500;">Who got it right?</span>
       <div id="correctMarkers" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
     </div>
     <div id="scoringStatus" class="scoring-disabled-note"></div>
@@ -508,7 +508,7 @@
     <div id="scoreDisplay" class="score-area"></div>
     <div id="compGameOver" class="win-message hidden"></div>
     <div class="quit-area">
-      <button class="quit-btn" id="compQuitBtn">✖ Quit Game</button>
+      <button class="quit-btn" id="compQuitBtn">Quit Game</button>
     </div>
   </div>
 
@@ -520,7 +520,6 @@
     // ---------- QUOTE DATASET (easy to extend) ----------
     const QUOTES = {
       'The Office (US)': [
-        // https://www.buzzfeed.com/samantharayjacobson/the-office-quotes
         { quote: "I think that pretty much sums it up...I found it at Spencer Gifts.", character: "Michael Scott", episode: "S1E1 - Pilot", context: "Michael says this while holding a mug reading 'World's Best Boss.'" },
         { quote: "Uh...nope. Nope. This isn't the surprise. It's surprising because you didn't expect it, but you will...you'll know it when you see it.", character: "Michael Scott", episode: "S1E3 - Health Care", context: "Classic Michael weaseling...and a brilliant cop out." },
         { quote: "Could you mean a vagina? Because if you do, I want that covered.", character: "Meredith Palmer", episode: "S1E3 - Health Care", context: "Kate Flannery's straight-faced delivery here is flawless." },
@@ -583,7 +582,6 @@
         { quote: "That's what she said!", character: "Michael Scott", episode: "S9E25 - Finale", context: "This is the 44th and final time Michael makes that joke." },
       ],
       "It's Always Sunny in Philadelphia": [
-        // https://collider.com/its-always-sunny-in-philadelphia-best-quotes-ranked/
         { quote: "She's dead! Take a good look 'cause she's gone. Ain't no one there. There's no flesh and no bones. She's dead, and she's gone. Goodbye, mom.", character: "Charlie Kelly", episode: "S18E1", context: "Charlie misinterprets a cue and sings a memorial song for his late mother." },
         { quote: "The car is a finisher car. A transporter of Gods. The Golden God! I am untethered, and my rage knows no bounds!", character: "Dennis Reynolds", episode: "S10E6 - The Gang Misses the Boat", context: "Dennis loses it when his Range Rover is called a 'starter car.'" },
         { quote: "Rum Ham! Rum Ham! I'm sorry, Rum Ham, I'm sorry!", character: "Frank Reynolds", episode: "S7E2 - The Gang Goes to the Jersey Shore", context: "Frank wails as his beloved rum-soaked ham floats away at sea." },
@@ -611,7 +609,6 @@
         { quote: "Because of the Implication.", character: "Dennis Reynolds", episode: "S6E3 - The Gang Buys a Boat", context: "Dennis explains his sinister plan to trick women on his party boat." },
       ],
       "Modern Family": [
-        // https://www.readersdigest.ca/culture/modern-family-quotes/
         { quote: "Look at them: A minute ago they were babies, and now they're driving, and soon we'll all be dead.", character: "Claire Dunphy", episode: "S2E24 - The Old Wagon", context: "Claire reflects on how fast her kids are growing up." },
         { quote: "The minute they got rid of rotary phones, everything went to hell.", character: "Jay Pritchett", episode: "S6E16 - Connection Lost", context: "Jay complains about modern technology." },
         { quote: "In my culture, mothers are very clingy to their sons. In fact, the leading cause of death among Colombian women is when their sons get married, but I'm not like that.", character: "Gloria Pritchett", episode: "S2E24 - The Old Wagon", context: "Gloria jokes about overbearing Latin American mothers." },
@@ -639,7 +636,6 @@
         { quote: "The only time I break a sweat is when we run after the ice cream truck.", character: "Phil Dunphy", episode: "S9E5 - Chips and Salsa", context: "Phil explains his unique approach to fitness." },
       ],
       "Parks and Recreation": [
-        // https://screenrant.com/best-parks-and-recreation-show-quotes/
         { quote: "Great job, everyone. The reception will be held in each of our individual houses alone.", character: "Ron Swanson", episode: "S6E1 - London, Part 1", context: "Ron's ideal wedding reception after his impromptu ceremony." },
         { quote: "Yes I am a hunter and it's you season.", character: "Donna Meagle", episode: "S2E20 - The Master Plan", context: "Donna suggests this as a pickup line for Tom." },
         { quote: "Hey, Leslie. It's Leslie. Hang in there. I love you. Bye.", character: "Leslie Knope", episode: "S2E22 - Telethon", context: "Leslie calls herself for a pep talk during the telethon." },
@@ -751,19 +747,13 @@
     const compQuitBtn = document.getElementById('compQuitBtn');
 
     // ---------- helper functions ----------
-    function shuffleArray(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
     function getEnabledQuotes() {
       const enabledList = [];
       for (const [show, quotes] of Object.entries(QUOTES)) {
         if (enabledShows[show]) {
-          enabledList.push(...quotes);
+          quotes.forEach(q => {
+            enabledList.push({ ...q, show: show });
+          });
         }
       }
       return enabledList;
@@ -828,7 +818,7 @@
       playersContainer.innerHTML = '';
       if (players.length === 0) {
         const empty = document.createElement('span');
-        empty.textContent = '👤 Add players';
+        empty.textContent = 'Add players';
         empty.style.color = '#b8b09a';
         empty.style.fontSize = '0.9rem';
         playersContainer.appendChild(empty);
@@ -948,14 +938,14 @@
 
       const answerVisible = !document.getElementById('compAnswer').classList.contains('hidden');
       if (!answerVisible) {
-        scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+        scoringStatus.textContent = 'Reveal the answer to enable scoring';
       } else {
         const scored = Object.values(scoredThisQuestion).filter(v => v === true).length;
         const total = players.length;
         if (scored === total && total > 0) {
-          scoringStatus.textContent = '✅ All players have scored for this question!';
+          scoringStatus.textContent = 'All players have scored for this question!';
         } else {
-          scoringStatus.textContent = `📝 Click player names to award points (${scored}/${total} scored)`;
+          scoringStatus.textContent = `Click player names to award points (${scored}/${total} scored)`;
         }
       }
     }
@@ -976,14 +966,13 @@
       if (roundLimit !== 0 && currentRound >= roundLimit) {
         gameOver = true;
         compGameOver.classList.remove('hidden');
-        compGameOver.textContent = `🏁 Game Over! ${roundLimit} questions completed.`;
-        compNewQuestionBtn.textContent = '🔄 New Game';
+        compGameOver.textContent = `Game Over! ${roundLimit} questions completed.`;
+        compNewQuestionBtn.textContent = 'New Game';
         updateQuestionCounter();
-        scoringStatus.textContent = '⏹️ Game over!';
+        scoringStatus.textContent = 'Game over!';
         return;
       }
 
-      // Reset scoring tracking for new question
       players.forEach(name => {
         scoredThisQuestion[name] = false;
       });
@@ -1000,7 +989,7 @@
       renderCorrectMarkers();
       updateScoreDisplay();
       updateQuestionCounter();
-      scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+      scoringStatus.textContent = 'Reveal the answer to enable scoring';
     }
 
     function resetCompetitiveGame() {
@@ -1014,7 +1003,7 @@
       });
       updateScoreDisplay();
       updateQuestionCounter();
-      scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+      scoringStatus.textContent = 'Reveal the answer to enable scoring';
       if (gameStarted) {
         compNewQuestion();
       }
@@ -1065,7 +1054,7 @@
       }
       gameStarted = true;
       startBtn.disabled = true;
-      startBtn.textContent = '⏳ Game in progress';
+      startBtn.textContent = 'Game in progress';
 
       configPanel.classList.add('hidden');
       configPanel2.classList.add('hidden');
@@ -1137,7 +1126,7 @@
         updateQuestionCounter();
         compGameOver.classList.add('hidden');
         compNewQuestionBtn.textContent = 'Next Question';
-        scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+        scoringStatus.textContent = 'Reveal the answer to enable scoring';
         configPanel.classList.remove('hidden');
         configPanel2.classList.remove('hidden');
         startArea.classList.remove('hidden');
@@ -1241,7 +1230,7 @@
           roundLimit = val;
           if (currentMode === 'competitive') {
             updateQuestionCounter();
-            scoringStatus.textContent = '🔒 Reveal the answer to enable scoring';
+            scoringStatus.textContent = 'Reveal the answer to enable scoring';
           }
         });
       });
