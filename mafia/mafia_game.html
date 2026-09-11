@@ -184,7 +184,7 @@
           <p><strong>Detective:</strong> each night, guess one player you think is a killer. If correct, that killer is caught and removed.</p>
           <p><strong>Civilian:</strong> no special powers, but you vote in trials.</p>
           <hr>
-          <h3>⚖️ Trial phase</h3>
+          <h3>Trial phase</h3>
           <p>After the night's results, players discuss and accuse. When <strong>2 players accuse the same person</strong>, that person goes on trial. They defend themselves, then everyone votes. If <strong>majority vote guilty</strong>, they are executed and removed.</p>
           <p class="muted">The host will select the executed player after the trial.</p>
           <hr>
@@ -231,7 +231,7 @@
       { val: '1', label: '1 killer' },
       { val: '2', label: '2 killers' },
       { val: 'mastermind', label: 'Mastermind + Hitman' },
-      { val: 'random', label: '🎲 Random (secret)' }
+      { val: 'random', label: 'Random' }
     ];
     modes.forEach(m => {
       const checked = cfg.killerMode === m.val ? 'checked' : '';
@@ -243,7 +243,7 @@
     html += `<label><input type="checkbox" id="detectiveChk" ${cfg.detectiveEnabled ? 'checked' : ''} /> Detective</label>`;
     html += `</div></div>`;
 
-    html += `<button class="btn btn-success btn-block" id="startGameBtn">⚔️ Start Game</button>`;
+    html += `<button class="btn btn-success btn-block" id="startGameBtn">Start Game</button>`;
     html += `<div class="status-box muted">${p.length} players · ${getModeLabel(cfg.killerMode)} · Doctor ${cfg.doctorEnabled ? 'on' : 'off'} · Detective ${cfg.detectiveEnabled ? 'on' : 'off'}</div>`;
 
     ui.innerHTML = html;
@@ -359,7 +359,7 @@
     const g = state.game;
     if (!g || !g.active) { renderSetup(); return; }
 
-    let html = `<h1>🔍 HOST DASHBOARD</h1>`;
+    let html = `<h1>HOST DASHBOARD</h1>`;
     html += `<div style="text-align:right;"><button class="btn btn-secondary" id="helpGameBtn">📖 Instructions</button></div>`;
     html += `<div class="card"><div class="flex-between"><span>Cycle ${g.cycle+1}</span><span>${g.alive.length} alive</span></div>`;
     html += `<div style="margin:0.5rem 0;">`;
@@ -395,7 +395,7 @@
 
   // ----- NIGHT PHASE -----
   function renderNightPhase(g) {
-    let html = `<div class="cycle-step"><p><strong>🌙 Night ${g.cycle+1}</strong></p>`;
+    let html = `<div class="cycle-step"><p><strong>Night ${g.cycle+1}</strong></p>`;
     const step = g.nightStep;
     if (step === 0) {
       html += `<p>Step 1: Killers wake</p><p class="muted">Killers: ${g.killers.join(', ')}</p>`;
@@ -419,10 +419,10 @@
         html += `</div>`;
       } else if (g.doctor) {
         html += `<p class="muted">Doctor (${g.doctor}) is dead.</p>`;
-        html += `<button class="btn" id="nightDoctorSkip">⏩ Skip (doctor dead)</button>`;
+        html += `<button class="btn" id="nightDoctorSkip">Skip (doctor dead)</button>`;
       } else {
         html += `<p class="muted">No doctor in game.</p>`;
-        html += `<button class="btn" id="nightDoctorSkip">⏩ Skip</button>`;
+        html += `<button class="btn" id="nightDoctorSkip">Skip</button>`;
       }
     } else if (step === 2) {
       html += `<p>Step 3: Detective wakes</p>`;
@@ -436,16 +436,16 @@
         html += `</div>`;
       } else if (g.detective) {
         html += `<p class="muted">Detective (${g.detective}) is dead.</p>`;
-        html += `<button class="btn" id="nightDetectiveSkip">⏩ Skip (detective dead)</button>`;
+        html += `<button class="btn" id="nightDetectiveSkip">Skip (detective dead)</button>`;
       } else {
         html += `<p class="muted">No detective in game.</p>`;
-        html += `<button class="btn" id="nightDetectiveSkip">⏩ Skip</button>`;
+        html += `<button class="btn" id="nightDetectiveSkip">Skip</button>`;
       }
     } else if (step === 3) {
-      html += `<p><strong>🌅 Dawn: Reveal</strong></p>`;
+      html += `<p><strong>Dawn: Reveal</strong></p>`;
       if (g.victim) {
         const deathMsg = g.deathMessage || randomDeath();
-        html += `<div class="death-msg">💀 ${g.victim} died: ${deathMsg}</div>`;
+        html += `<div class="death-msg">${g.victim} died: ${deathMsg}</div>`;
         if (g.saved === g.victim) {
           html += `<p>💉 But the doctor saved them!</p>`;
         }
@@ -453,9 +453,9 @@
         html += `<p>No murder this night.</p>`;
       }
       if (g.detectiveGuess && g.killerCaught) {
-        html += `<p>🔎 Detective caught a killer: ${g.detectiveGuess}!</p>`;
+        html += `<p>Detective caught a killer: ${g.detectiveGuess}!</p>`;
       }
-      html += `<button class="btn btn-success" id="revealBtn">☀️ Proceed to Trial</button>`;
+      html += `<button class="btn btn-success" id="revealBtn">Proceed to Trial</button>`;
     }
     html += `</div>`;
     return html;
@@ -551,7 +551,7 @@
 
   // ----- TRIAL PHASE (host only selects guilty player) -----
   function renderTrialPhase(g) {
-    let html = `<div class="cycle-step"><p><strong>⚖️ Trial Phase</strong></p>`;
+    let html = `<div class="cycle-step"><p><strong>Trial Phase</strong></p>`;
     html += `<div class="trial-msg">`;
     html += `<p>Players discuss and accuse. When 2 players accuse the same person, that person goes on trial.</p>`;
     html += `<p class="muted">The host facilitates discussion. After the trial vote, select the player found guilty.</p>`;
@@ -561,16 +561,16 @@
       html += `<p><strong>Select the player found guilty by the trial:</strong></p>`;
       html += `<div class="kill-select-grid">`;
       g.alive.forEach(p => {
-        html += `<button class="btn btn-danger trial-guilty" data-target="${p}">⚖️ ${p}</button>`;
+        html += `<button class="btn btn-danger trial-guilty" data-target="${p}">${p}</button>`;
       });
       html += `</div>`;
       html += `<p class="muted">(The group must find someone guilty each round)</p>`;
     } else if (g.trialPhase === 'done') {
-      html += `<p>⚖️ Trial complete.</p>`;
+      html += `<p>Trial complete.</p>`;
       if (g.executedThisCycle) {
         html += `<p>${g.trialAccused} was executed.</p>`;
       }
-      html += `<button class="btn btn-success" id="trialProceedDay">☀️ Proceed to Day</button>`;
+      html += `<button class="btn btn-success" id="trialProceedDay">Proceed to Day</button>`;
     }
     html += `</div>`;
     return html;
@@ -617,19 +617,19 @@
 
   // ----- DAY PHASE -----
   function renderDayPhase(g) {
-    let html = `<div class="cycle-step"><p><strong>☀️ Day ${g.cycle+1}</strong></p>`;
+    let html = `<div class="cycle-step"><p><strong>Day ${g.cycle+1}</strong></p>`;
     if (g.victim && g.saved !== g.victim) {
-      html += `<div class="death-msg">💀 ${g.victim} was killed: ${g.deathMessage || randomDeath()}</div>`;
+      html += `<div class="death-msg">${g.victim} was killed: ${g.deathMessage || randomDeath()}</div>`;
     } else if (g.victim && g.saved === g.victim) {
       html += `<p>💉 ${g.victim} was attacked but saved!</p>`;
     } else {
       html += `<p>No murder last night.</p>`;
     }
     if (g.detectiveGuess && g.killerCaught) {
-      html += `<p>🔎 Detective caught a killer: ${g.detectiveGuess}.</p>`;
+      html += `<p>Detective caught a killer: ${g.detectiveGuess}.</p>`;
     }
     if (g.executedThisCycle) {
-      html += `<p>⚖️ ${g.trialAccused} was executed by trial.</p>`;
+      html += `<p>${g.trialAccused} was executed by trial.</p>`;
     }
 
     const killersAlive = g.killers.filter(k => g.alive.includes(k));
@@ -647,7 +647,7 @@
       return ''; 
     }
 
-    html += `<button class="btn btn-success btn-block" id="nextNightBtn">🌙 Next Night</button>`;
+    html += `<button class="btn btn-success btn-block" id="nextNightBtn">Next Night</button>`;
     html += `</div>`;
     return html;
   }
