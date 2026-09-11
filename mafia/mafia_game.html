@@ -101,10 +101,23 @@
     showHelp: false,
   };
 
-  // ----- 50+ DEATH MESSAGES -----
+  // ----- DEATH MESSAGES (expanded) -----
   const DEATH_MESSAGES = [
     "tripped and fell into a woodchipper",
     "was flattened by a runaway steamroller",
+    "mysteriously choked on a spoon",
+    "was pushed into a vat of molasses",
+    "got tangled in fairy lights and strangled",
+    "was hit by a stray meteorite",
+    "accidentally ingested poison‑oak smoothie",
+    "slipped on a banana peel and broke their neck",
+    "was mauled by a suspiciously aggressive squirrel",
+    "fell into a bottomless pit",
+    "was found with a suspiciously sharp candlestick",
+    "expired due to extreme sarcasm overdose",
+    "was last seen arguing with a dark alley",
+    "lost a duel with a ceiling fan",
+    "was trampled by a herd of angry tortoises"
   ];
 
   function randomDeath() { return DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]; }
@@ -117,7 +130,7 @@
     else { renderSetup(); }
   }
 
-  // ----- HELP MODAL -----
+  // ----- HELP MODAL (updated with role‑claim and doctor save rules) -----
   function renderHelpModal() {
     const helpHtml = `
       <div class="modal-overlay" id="helpOverlay">
@@ -130,9 +143,14 @@
           <p><strong>Detective:</strong> each night, guess one player you think is a killer. If correct, that killer is caught and removed.</p>
           <p><strong>Civilian:</strong> no special powers, but you vote in trials.</p>
           <hr>
-          <h3>Trial phase</h3>
-          <p>After the night's results, players discuss and accuse. When <strong>2 players accuse the same person</strong>, that person goes on trial. They defend themselves, then everyone votes. If <strong>majority vote guilty</strong>, they are executed and removed.</p>
+          <h3>Trial phase &amp; role claims</h3>
+          <p>Players discuss and accuse. When <strong>2 players accuse the same person</strong>, that person goes on trial.</p>
+          <p><strong>During the trial, players are allowed to tell each other their roles, but they are also allowed to lie about their roles.</strong> The host should not confirm or deny any claims.</p>
+          <p>After the defence, everyone votes. If <strong>majority vote guilty</strong>, the accused is executed and removed.</p>
           <p class="muted">The host will select the executed player after the trial.</p>
+          <hr>
+          <h3>Doctor save reveal</h3>
+          <p>When the doctor saves someone, the host should <strong>not</strong> announce who was saved. Instead, simply state that <strong>there was an attempted murder, but the doctor saved them.</strong> Do not name the saved player.</p>
           <hr>
           <p class="muted">Host selects all actions manually via buttons.</p>
           <button class="btn btn-block" id="helpCloseBtn2">Got it</button>
@@ -292,7 +310,7 @@
       gameOver: false,
       winner: null,
       deathMessage: '',
-      trialPhase: 'idle', // 'idle' | 'active' | 'done'
+      trialPhase: 'idle',
       trialAccused: null,
       executedThisCycle: false,
     };
@@ -306,7 +324,10 @@
     if (!g || !g.active) { renderSetup(); return; }
 
     let html = `<h1>HOST DASHBOARD</h1>`;
-    html += `<div style="text-align:right;"><button class="btn btn-secondary" id="helpGameBtn">Instructions</button></div>`;
+    html += `<div style="text-align:right; display: flex; justify-content: space-between; align-items: center;">`;
+    html += `<button class="btn btn-secondary" id="helpGameBtn">Instructions</button>`;
+    html += `<button class="btn btn-danger" id="quitGameBtn">✕ Quit game</button>`;
+    html += `</div>`;
     html += `<div class="card"><div class="flex-between"><span>Cycle ${g.cycle+1}</span><span>${g.alive.length} alive</span></div>`;
     html += `<div style="margin:0.5rem 0;">`;
     g.alive.forEach(name => {
@@ -321,6 +342,7 @@
       ui.innerHTML = html;
       document.getElementById('backToSetupBtn').addEventListener('click', function() { state.game = null; render(); });
       document.getElementById('helpGameBtn').addEventListener('click', function() { state.showHelp = true; render(); });
+      document.getElementById('quitGameBtn').addEventListener('click', function() { quitGame(); });
       return;
     }
 
@@ -334,12 +356,21 @@
 
     ui.innerHTML = html;
     document.getElementById('helpGameBtn').addEventListener('click', function() { state.showHelp = true; render(); });
+    document.getElementById('quitGameBtn').addEventListener('click', function() { quitGame(); });
     bindNightEvents(g);
     bindTrialEvents(g);
     bindDayEvents(g);
   }
 
-  // ----- NIGHT PHASE -----
+  // ----- QUIT GAME -----
+  function quitGame() {
+    if (confirm('Quit the current game and return to setup?')) {
+      state.game = null;
+      render();
+    }
+  }
+
+  // ----- NIGHT PHASE (doctor save message updated — no name) -----
   function renderNightPhase(g) {
     let html = `<div class="cycle-step"><p><strong>Night ${g.cycle+1}</strong></p>`;
     const step = g.nightStep;
@@ -393,7 +424,8 @@
         const deathMsg = g.deathMessage || randomDeath();
         html += `<div class="death-msg">${g.victim} died: ${deathMsg}</div>`;
         if (g.saved === g.victim) {
-          html += `<p>💉 But the doctor saved them!</p>`;
+          // Updated message: don't reveal who was saved
+          html += `<p>💉 There was an attempted murder, but the doctor saved them!</p>`;
         }
       } else {
         html += `<p>No murder this night.</p>`;
@@ -495,11 +527,12 @@
     }
   }
 
-  // ----- TRIAL PHASE (host only selects guilty player) -----
+  // ----- TRIAL PHASE (added note about role claims) -----
   function renderTrialPhase(g) {
     let html = `<div class="cycle-step"><p><strong>Trial Phase</strong></p>`;
     html += `<div class="trial-msg">`;
     html += `<p>Players discuss and accuse. When 2 players accuse the same person, that person goes on trial.</p>`;
+    html += `<p><strong>Players may tell each other their roles, but they are also allowed to lie about their roles.</strong></p>`;
     html += `<p class="muted">The host facilitates discussion. After the trial vote, select the player found guilty.</p>`;
     html += `</div>`;
 
@@ -561,13 +594,14 @@
     }
   }
 
-  // ----- DAY PHASE -----
+  // ----- DAY PHASE (doctor save message updated — no name) -----
   function renderDayPhase(g) {
     let html = `<div class="cycle-step"><p><strong>Day ${g.cycle+1}</strong></p>`;
     if (g.victim && g.saved !== g.victim) {
       html += `<div class="death-msg">${g.victim} was killed: ${g.deathMessage || randomDeath()}</div>`;
     } else if (g.victim && g.saved === g.victim) {
-      html += `<p>💉 ${g.victim} was attacked but saved!</p>`;
+      // Updated: don't reveal who was saved
+      html += `<p>💉 There was an attempted murder, but the doctor saved them!</p>`;
     } else {
       html += `<p>No murder last night.</p>`;
     }
