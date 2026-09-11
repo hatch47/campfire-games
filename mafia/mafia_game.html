@@ -337,7 +337,7 @@
     html += `</div>`;
 
     if (g.gameOver) {
-      html += `<div class="status-box">🏁 GAME OVER · ${g.winner || 'unknown'} wins</div>`;
+      html += `<div class="status-box">GAME OVER · ${g.winner || 'unknown'} wins</div>`;
       html += `<button class="btn btn-secondary btn-block" id="backToSetupBtn">↩ Back to setup</button>`;
       ui.innerHTML = html;
       document.getElementById('backToSetupBtn').addEventListener('click', function() { state.game = null; render(); });
@@ -370,7 +370,7 @@
     }
   }
 
-  // ----- NIGHT PHASE (doctor save message updated — no name) -----
+  // ----- NIGHT PHASE (doctor save message updated — no death message when saved) -----
   function renderNightPhase(g) {
     let html = `<div class="cycle-step"><p><strong>Night ${g.cycle+1}</strong></p>`;
     const step = g.nightStep;
@@ -421,11 +421,12 @@
     } else if (step === 3) {
       html += `<p><strong>Dawn: Reveal</strong></p>`;
       if (g.victim) {
-        const deathMsg = g.deathMessage || randomDeath();
-        html += `<div class="death-msg">${g.victim} died: ${deathMsg}</div>`;
         if (g.saved === g.victim) {
-          // Updated message: don't reveal who was saved
-          html += `<p>💉 There was an attempted murder, but the doctor saved them!</p>`;
+          // Doctor saved the victim: NO death message, only the save message
+          html += `<p>There was an attempted murder, but the doctor saved them!</p>`;
+        } else {
+          const deathMsg = g.deathMessage || randomDeath();
+          html += `<div class="death-msg">${g.victim} died: ${deathMsg}</div>`;
         }
       } else {
         html += `<p>No murder this night.</p>`;
@@ -594,14 +595,14 @@
     }
   }
 
-  // ----- DAY PHASE (doctor save message updated — no name) -----
+  // ----- DAY PHASE (doctor save message updated — no death message when saved) -----
   function renderDayPhase(g) {
     let html = `<div class="cycle-step"><p><strong>Day ${g.cycle+1}</strong></p>`;
-    if (g.victim && g.saved !== g.victim) {
+    if (g.victim && g.saved === g.victim) {
+      // Doctor saved the victim: NO death message, only the save message
+      html += `<p>There was an attempted murder, but the doctor saved them!</p>`;
+    } else if (g.victim && g.saved !== g.victim) {
       html += `<div class="death-msg">${g.victim} was killed: ${g.deathMessage || randomDeath()}</div>`;
-    } else if (g.victim && g.saved === g.victim) {
-      // Updated: don't reveal who was saved
-      html += `<p>💉 There was an attempted murder, but the doctor saved them!</p>`;
     } else {
       html += `<p>No murder last night.</p>`;
     }
