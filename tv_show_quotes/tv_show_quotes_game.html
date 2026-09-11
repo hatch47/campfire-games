@@ -714,8 +714,6 @@
     const configPanel = document.getElementById('configPanel');
     const configPanel2 = document.getElementById('configPanel2');
     const showToggleGroup = document.getElementById('showToggleGroup');
-    const quoteCountSpan = document.getElementById('quoteCount');
-
     const playersContainer = document.getElementById('playersContainer');
     const playerNameInput = document.getElementById('playerNameInput');
     const addPlayerBtn = document.getElementById('addPlayerBtn');
@@ -809,8 +807,7 @@
     }
 
     function updateQuoteCount() {
-      const count = getEnabledQuotes().length;
-      quoteCountSpan.textContent = count;
+        // No-op: quote counter removed from footer
     }
 
     // ---------- update players UI ----------
