@@ -103,62 +103,8 @@
 
   // ----- 50+ DEATH MESSAGES -----
   const DEATH_MESSAGES = [
-    "tripped over a rubber chicken and fell into a woodchipper",
-    "was tragically suffocated by a rogue balloon animal",
-    "was mistaken for a piñata at a children's party",
-    "tried to fight a badger and lost",
-    "was struck by a falling anvil (ACME approved)",
-    "drank cursed tea and turned into a garden gnome",
-    "was hugged too tightly by a deranged robot",
-    "fell into a vat of maple syrup and drowned",
-    "was poked to death by a very determined squirrel",
-    "exploded after eating a suspicious burrito",
+    "tripped and fell into a woodchipper",
     "was flattened by a runaway steamroller",
-    "got tangled in a murder of crows and never escaped",
-    "was challenged to a dance-off and lost their life",
-    "accidentally summoned a demon while reading a cookbook",
-    "was chased off a cliff by a herd of aggressive sheep",
-    "sneezed so hard they un-existed",
-    "was turned into a newt (but got better)",
-    "was sat on by a giant marshmallow",
-    "fell through a portal to the sock dimension",
-    "was defeated by a goose with a grudge",
-    "tried to pet a wild moose and regretted it",
-    "was baked into a pie by a rogue baker",
-    "was struck by lightning twice (bad luck)",
-    "was kidnapped by pirates and made to walk the plank",
-    "was smothered by a swarm of glitter",
-    "was beaten at their own game by a cat",
-    "fell into a well and found a monster",
-    "was turned into stone by a medusa with great aim",
-    "was eaten by a giant frog (ribbit)",
-    "was lost in a corn maze forever",
-    "was hit by a stray boomerang from 1995",
-    "was challenged to a duel and lost to a ghost",
-    "was melted by a really, really hot pizza",
-    "was dragged under by a vengeful rubber duck",
-    "was obliterated by a cosmic ray burp",
-    "was tricked into buying a haunted vase",
-    "was defeated by a mime in a battle of wills",
-    "was swallowed by a giant gummy worm",
-    "was turned into a fine mist by a malfunctioning teleporter",
-    "was given a cursed high-five",
-    "was out-stared by a cat and disintegrated",
-    "was exploded by a confetti cannon",
-    "was trapped in a snow globe and shaken",
-    "was defeated by a swarm of angry bees with a vendetta",
-    "was force-fed a ghost pepper and combusted",
-    "was turned into a lawn ornament",
-    "was lost in a game of hide-and-seek for eternity",
-    "was eaten by a bookworm (the literary kind)",
-    "was flattened by a falling piano (classic)",
-    "was simply too fabulous and vanished",
-    "was outrun by a snail and died of shame",
-    "was baked into a cake and served at a party",
-    "was defeated by a puzzle with no solution",
-    "was turned into a frog and then stepped on",
-    "was struck by a stray meteorite (bad day)",
-    "was swallowed by a giant jellyfish",
   ];
 
   function randomDeath() { return DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]; }
@@ -177,7 +123,7 @@
       <div class="modal-overlay" id="helpOverlay">
         <div class="modal-box">
           <button class="close-btn" id="helpCloseBtn">✕ close</button>
-          <h2>📖 Role Guide</h2>
+          <h2>Role Guide</h2>
           <p><strong>Killer (1 or 2):</strong> choose one player to murder each night.</p>
           <p><strong>Mastermind + Hitman:</strong> Mastermind chooses the target, Hitman executes. Both are killers.</p>
           <p><strong>Doctor:</strong> each night, choose one player to save from murder.</p>
@@ -214,7 +160,7 @@
     const p = state.players;
     const cfg = state.config;
     let html = `<h1>Mafia</h1>`;
-    html += `<div style="text-align:right;"><button class="btn btn-secondary" id="helpSetupBtn">📖 Instructions</button></div>`;
+    html += `<div style="text-align:right;"><button class="btn btn-secondary" id="helpSetupBtn">Instructions</button></div>`;
     html += `<div class="card"><h2>Players</h2><div class="row">`;
     html += `<input type="text" id="playerInput" placeholder="Add name" />`;
     html += `<button class="btn" id="addPlayerBtn">+</button></div>`;
@@ -360,7 +306,7 @@
     if (!g || !g.active) { renderSetup(); return; }
 
     let html = `<h1>HOST DASHBOARD</h1>`;
-    html += `<div style="text-align:right;"><button class="btn btn-secondary" id="helpGameBtn">📖 Instructions</button></div>`;
+    html += `<div style="text-align:right;"><button class="btn btn-secondary" id="helpGameBtn">Instructions</button></div>`;
     html += `<div class="card"><div class="flex-between"><span>Cycle ${g.cycle+1}</span><span>${g.alive.length} alive</span></div>`;
     html += `<div style="margin:0.5rem 0;">`;
     g.alive.forEach(name => {
